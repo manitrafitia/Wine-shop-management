@@ -10,12 +10,12 @@ export default function Sidebar({ children }) {
   
   return (
     <aside className="h-screen">
-      <nav className="h-full flex flex-col border-r bg-slate-100 shadow-md w-300">
+      <nav className="h-full flex flex-col bg-white shadow-md w-300">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
              src={Logo} 
             className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
+              expanded ? "w-40" : "w-0"
             }`}
             alt=""
           />
@@ -62,12 +62,12 @@ export function SidebarItem({ icon, text, active, alert }) {
     <li
       className={`
         relative flex items-center py-3 px-3 my-1
-        font-medium rounded-md cursor-pointer ml-2
+        font-medium rounded-lg cursor-pointer ml-2
         transition-colors group
         ${
           active
-            ? "shadow-md bg-white text-slate-700"
-            : "hover:bg-white text-slate-600"
+            ? "shadow-md bg-pink-700 text-white"
+            : "hover:bg-slate-200 text-slate-600"
         }
     `}
     >

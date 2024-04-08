@@ -100,27 +100,27 @@ export default function Vin() {
       <div className="flex justify-between mb-4">
         <p className="text-2xl text-slate-700">Liste des vins</p>
         <div>
-          <button className="bg-indigo-500 text-white px-4 mr-2 py-2 rounded hover:bg-indigo-600"> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vin</button>
+          <button className="bg-pink-500 text-white px-4 mr-2 py-2 rounded hover:bg-pink-600"> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vin</button>
           <button className="bg-slate-100 px-4 py-2 rounded hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer tout</button>
         </div>
       </div>
       <table className="table-auto min-w-full z-3">
-        <thead className='text-indigo-500 text-left'>
+        <thead className='text-pink-500 text-left'>
           <tr>
             <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
             </th>
             <th className="px-4 py-4" onClick={() => handleSort('num_vin')}>
-              #<FontAwesomeIcon className="float-right text-indigo-200 hover:text-indigo-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              #<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4" onClick={() => handleSort('nom')}>
-              Nom<FontAwesomeIcon className="float-right text-indigo-200 hover:text-indigo-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              Nom<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4" onClick={() => handleSort('prix')}>
-              Prix(€)<FontAwesomeIcon className="float-right text-indigo-200 hover:text-indigo-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              Prix(€)<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4" onClick={() => handleSort('quantite')}>
-              Quantité<FontAwesomeIcon className="float-right text-indigo-200 hover:text-indigo-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              Quantité<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4"></th>
           </tr>
@@ -148,17 +148,17 @@ export default function Vin() {
       {/* Pagination */}
       <div className="flex justify-between mt-4">
         <div>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-indigo-500 px-2 py-1 rounded hover:bg-indigo-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </button>
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-indigo-500 px-2 py-1 rounded hover:bg-indigo-100 disabled:opacity-50">Préc</button>
+          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">Préc</button>
         </div>
         <div>
           <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
         </div>
         <div>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-indigo-500 px-2 py-1 rounded hover:bg-indigo-100 disabled:opacity-50">Suiv</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-indigo-500 px-2 py-1 rounded hover:bg-indigo-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">Suiv</button>
+          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </button>
         </div>

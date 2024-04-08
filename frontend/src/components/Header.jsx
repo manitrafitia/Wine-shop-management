@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faBell, faGear, faClockRotateLeft} from '@fortawesome/free-solid-svg-icons';
 import Avatar from '../assets/images.png';
 
 export default function NavigationBar() {
@@ -25,14 +25,20 @@ export default function NavigationBar() {
         </ul>
         <ul className="flex items-center">
         <li className="ml-4">
-            <FontAwesomeIcon icon={faBell} />
-          </li>
-          <li className="ml-4">
           <img
             src={ Avatar }
             alt=""
             className="w-8 h-8 rounded-full"
           />
+          </li>
+        <li className="ml-4">
+            <FontAwesomeIcon icon={faBell} />
+          </li>
+          <li className="ml-4">
+            <FontAwesomeIcon icon={faGear} />
+          </li>
+          <li className="ml-4">
+            <FontAwesomeIcon icon={faClockRotateLeft} />
           </li>
         </ul>
       </nav>

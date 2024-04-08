@@ -68,7 +68,9 @@ function App() {
           {currentPage === 'Client' && <Client />}
           {currentPage === 'Vente' && <Vente />}
         </div>
+        
       </div>
+     
     </>
   );
 }
