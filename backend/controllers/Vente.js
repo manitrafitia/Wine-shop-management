@@ -135,3 +135,46 @@ exports.getSalesStats = async (req, res) => {
         res.status(500).json({ message: "Erreur lors du calcul du chiffre d'affaires et du nombre de bouteilles vendues." });
     }
 };
+
+exports.getSalesByMonth = async (req, res) => {
+    try {
+        const salesByMonth = await Vente.aggregate([
+            {
+                $project: {
+                    month: { $month: '$date' },
+                    year: { $year: '$date' },
+                    quantite_vendue: 1 // Inclure la quantité vendue dans les résultats
+                }
+            },
+            {
+                $group: {
+                    _id: { month: '$month', year: '$year' },
+                    totalQuantite: { $sum: '$quantite_vendue' } // Utiliser la quantité vendue pour calculer le total par mois
+                }
+            },
+            {
+                $sort: {
+                    '_id.year': 1,
+                    '_id.month': 1
+                }
+            }
+        ]);
+
+        // Mapper les numéros de mois en format abrégé
+        const salesByMonthFormatted = salesByMonth.map(item => {
+            const monthNames = ["", "jan", "fév", "mar", "avr", "mai", "juin", "juil", "août", "sept", "oct", "nov", "déc"];
+            return {
+                _id: {
+                    month: monthNames[item._id.month],
+                    year: item._id.year
+                },
+                totalQuantite: item.totalQuantite
+            };
+        });
+
+        res.status(200).json(salesByMonthFormatted);
+    } catch (error) {
+        console.error("Error retrieving sales by month:", error);
+        res.status(500).json({ message: "Erreur lors de la récupération du nombre de ventes par mois." });
+    }
+};

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const clientController = require('../controllers/Client');
 
+router.get('/total', clientController.getTotalClients);
 router.post('/', clientController.create);
 router.get('/', clientController.findAll);
 router.get('/:num_client', clientController.findOne);

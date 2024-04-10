@@ -8,7 +8,7 @@ function generateClientNumber(nextId) {
 // Créer un nouveau client
 exports.create = async (req, res) => {
     try {
-        const { nom, adresse, email, telephone } = req.body;
+        const { nom, adresse, email, telephone, photo_profil } = req.body;
         
         // Trouver le dernier client enregistré pour obtenir le prochain numéro de client
         const lastClient = await Client.findOne({}, {}, { sort: { 'num_client': -1 } });
@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
         const num_client = generateClientNumber(nextId);
 
         // Créer le nouveau client
-        const client = new Client({ num_client, nom, adresse, email, telephone });
+        const client = new Client({ num_client, nom, adresse, email, telephone, photo_profil });
         const savedClient = await client.save();
         res.status(201).json(savedClient);
     } catch (error) {
@@ -75,5 +75,14 @@ exports.delete = async (req, res) => {
         res.status(200).json({ message: "Client supprimé avec succès!" });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la suppression du client avec le numéro " + req.params.num_client });
+    }
+};
+// Obtient le total de clients
+exports.getTotalClients = async (req, res) => {
+    try {
+        const totalClients = await Client.countDocuments();
+        res.status(200).json({ totalClients });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors du calcul du total de clients." });
     }
 };

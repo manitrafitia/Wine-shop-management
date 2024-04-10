@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from './TableFunctions';
 import AddVin from './AddVin'; 
+import EditVin from './EditVin';
 
 export default function Vin() {
+  const [selectedVinData, setSelectedVinData] = useState(null);
+
   const {
     data,
     setData,
@@ -15,7 +18,7 @@ export default function Vin() {
   const [totalPages, setTotalPages] = useState(0);
   const [sortType, setSortType] = useState('asc');
   const [sortColumn, setSortColumn] = useState('');
-  const [itemsPerPage] = useState(7);
+  const [itemsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [isCheckedAll, setIsCheckedAll] = useState(false); // État pour suivre si toutes les cases sont cochées
   const [checkedItems, setCheckedItems] = useState([]); // État pour suivre les cases cochées
@@ -25,11 +28,10 @@ export default function Vin() {
       try {
         const response = await axios.get('http://localhost:3000/vin');
         setData(response.data);
-        setCheckedItems(new Array(response.data.length).fill(false)); // Initialiser toutes les cases à cocher à false
+        setCheckedItems(new Array(response.data.length).fill(false));
         setIsCheckedAll(false);
-           // Mettre à jour le nombre total de pages lorsque les données sont chargées
-           const totalPagesCount = Math.ceil(response.data.length / itemsPerPage);
-           setTotalPages(totalPagesCount);
+        const totalPagesCount = Math.ceil(response.data.length / itemsPerPage);
+        setTotalPages(totalPagesCount);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
@@ -37,6 +39,16 @@ export default function Vin() {
 
     fetchData();
   }, [setData]);
+
+  const handleUpdateData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/vin');
+      setData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des données :', error);
+    }
+  };
+
 
   const handleCheckItem = (index) => {
     const newCheckedItems = [...checkedItems];
@@ -100,50 +112,78 @@ export default function Vin() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedData = sortedData.slice(startIndex, endIndex);
 
+  const [vinToEdit, setVinToEdit] = useState(null);
+  const [selectedVinId, setSelectedVinId] = useState(null); // État pour stocker l'ID du vin sélectionné pour la modification
+  const [showEditVinDialog, setShowEditVinDialog] = useState(false);
+  const handleEditVin = async (num_vin, nom) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/vin/${num_vin}`);
+      setSelectedVinData(response.data);
+      setShowEditVinDialog(true);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données du vin à modifier :', error);
+    }
+  };
+  
+  
   return (
-    <div className="overflow-x-auto m-4 bg-white rounded-lg p-4">
+    <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
       <div className="flex justify-between mb-4">
         <p className="text-2xl text-slate-700">Liste des vins</p>
         <div>
-        <button className="bg-cabaret-500 text-white px-4 mr-2 py-2 rounded hover:bg-cabaret-600" onClick={() => setShowAddVinDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vin</button>
-          <button className="bg-slate-100 px-4 py-2 rounded hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer tout</button>
+        <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddVinDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
+          <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button>
         </div>
       </div>
       <table className="table-auto min-w-full z-3">
-        <thead className='text-cabaret-500 text-left'>
+        <thead className='text-left text-slate-900 border-t border-slate-100'>
           <tr>
             <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('num_vin')}>
-              #<FontAwesomeIcon className="float-right text-cabaret-200 hover:text-cabaret-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_vin')}>
+              #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('nom')}>
-              Nom<FontAwesomeIcon className="float-right text-cabaret-200 hover:text-cabaret-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
+              NOM<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('prix')}>
-              Prix(€)<FontAwesomeIcon className="float-right text-cabaret-200 hover:text-cabaret-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('prix')}>
+              PRIX (€)<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('quantite')}>
-              Quantité<FontAwesomeIcon className="float-right text-cabaret-200 hover:text-cabaret-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('quantite')}>
+              QUANTITE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4"></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {/* Afficher les données paginées */}
           {paginatedData.map((vin, index) => (
-            <tr key={index}>
-              <td className="border-t border-slate-200 px-4 py-4">
+            <tr key={index} className='font-semibold text-slate-600'>
+              <td className="border-t border-slate-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
               </td>
-              <td className="border-t border-slate-200 px-4 py-4">{vin.num_vin}</td>
-              <td className="border-t border-slate-200 px-4 py-4">{vin.nom}</td>
-              <td className="border-t border-slate-200 px-4 py-4">{vin.prix}</td>
-              <td className={`border-t border-slate-200 px-4 py-4 font-bold ${getQuantiteColor(vin.quantite)}`}>{vin.quantite}</td>
-              <td className="border-t border-slate-200 text-slate-500 px-4 py-4 hover:text-slate-700"><FontAwesomeIcon icon={faPencil} /></td>
-              <td className="border-t border-slate-200 text-slate-500 px-4 py-4 hover:text-slate-700"><FontAwesomeIcon icon={faTrash} /></td>
-              <td className="border-t border-slate-200 text-slate-500 px-4 py-4 hover:text-slate-700"><FontAwesomeIcon icon={faEllipsisH} /></td>
+              <td className="border-t border-slate-100 px-4 py-4">{vin.num_vin}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{vin.nom}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{vin.prix}</td>
+              <td className={`border-t border-slate-100 px-4 py-4 font-bold`}>{vin.quantite}</td>
+              <td className="border-t border-slate-100 text-teal-500 px-4 py-4 hover:text-teal-400">
+              <button onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
+  <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6 flex items-center justify-center'>
+    <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faPencil} />
+  </div>
+</button>
+
+</td>
+
+              <td className="border-t border-slate-'00 text-red-400 px-4 py-4 hover:text-red-600">
+                <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
+                <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
+                </div>
+                      
+                </td>
+    
             </tr>
           ))}
         </tbody>
@@ -153,22 +193,31 @@ export default function Vin() {
       {/* Pagination */}
       <div className="flex justify-between mt-4">
         <div>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-cabaret-500 px-2 py-1 rounded hover:bg-cabaret-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </button>
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-cabaret-500 px-2 py-1 rounded hover:bg-cabaret-100 disabled:opacity-50">Préc</button>
+          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Préc</button>
         </div>
         <div>
           <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
         </div>
         <div>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-cabaret-500 px-2 py-1 rounded hover:bg-cabaret-100 disabled:opacity-50">Suiv</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-cabaret-500 px-2 py-1 rounded hover:bg-cabaret-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Suiv</button>
+          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </button>
         </div>
       </div>
-      {showAddVinDialog && <AddVin onClose={() => setShowAddVinDialog(false)} />}
+      {showAddVinDialog && <AddVin onClose={() => setShowAddVinDialog(false)} updateData={handleUpdateData} />} 
+      {showEditVinDialog && (
+  <EditVin
+    onClose={() => setShowEditVinDialog(false)}
+    updateData={handleUpdateData}
+    vinId={selectedVinId}
+    vinData={selectedVinData}
+  />
+)}
+
     </div>
   );
 }

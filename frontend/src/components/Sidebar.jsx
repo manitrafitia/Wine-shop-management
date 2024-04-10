@@ -62,11 +62,11 @@ export function SidebarItem({ icon, text, active, alert }) {
     <li
       className={`
         relative flex items-center py-3 px-3 my-1
-        font-medium rounded-full cursor-pointer ml-2
+        font-medium rounded-lg cursor-pointer ml-2
         transition-colors group
         ${
           active
-            ? "shadow-md bg-vinRouge-400 text-white"
+            ? "shadow-md bg-ziggurat-400 text-white"
             : "hover:bg-slate-100 text-slate-600"
         }
     `}

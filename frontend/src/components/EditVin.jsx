@@ -2,10 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
-export default function AddVin({ onClose, updateData }) {
-
-  const [vinData, setVinData] = useState({
+export default function EditVin({ onClose, updateData, vinData: propVinData }) {
+  const [vinData, setVinData] = useState(propVinData || {
     nom: '',
     cepages: '',
     appellation: '',
@@ -85,7 +83,7 @@ export default function AddVin({ onClose, updateData }) {
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
       <div ref={dialogRef} className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10'>
         <div className="flex p-3 mb-2 bg-slate-100 pb-4 rounded-t-xl ">
-          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Ajouter un vin</h2>
+          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Modifier un vin</h2>
           <FontAwesomeIcon className='mt-2  mx-2 hover:text-slate-400' onClick={onClose} icon={faTimes} />
         </div>
         <form onSubmit={handleSubmit} className=' font-semibold mx-2  p-5'>
@@ -200,7 +198,7 @@ export default function AddVin({ onClose, updateData }) {
             <button
               type='submit'
               className='w-1/2 bg-ziggurat-500 text-white ml-2 py-2 rounded hover:bg-ziggurat-600'
-            >Ajouter</button>
+            >Modifier</button>
 
           </div>
         </form>

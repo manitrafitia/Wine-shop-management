@@ -9,7 +9,7 @@ export default function Dashboard() {
       <div>
         <Cards></Cards>
       </div>
-      <div className="m-4 flex justify-center">
+      <div className="m-4 mt-4 flex justify-center">
         <div className="w-1/2 mx-2">
           <Chart></Chart>
         </div>

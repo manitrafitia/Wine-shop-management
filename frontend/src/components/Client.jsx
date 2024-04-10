@@ -3,11 +3,12 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from './TableFunctions';
+import AddClient from './AddClient';
 
 export default function Client() {
   const [sortType, setSortType] = useState('asc');
   const [sortColumn, setSortColumn] = useState('');
-  const [itemsPerPage] = useState(7);
+  const [itemsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const {
     data,
@@ -21,17 +22,29 @@ export default function Client() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/client'); // Assurez-vous que l'URL est correcte
+        const response = await axios.get('http://localhost:3000/client');
         setData(response.data);
-        setCheckedItems(new Array(response.data.length).fill(false)); // Initialiser toutes les cases à cocher à false
-        setIsCheckedAll(false); // Reset isCheckedAll when data is loaded
+        setCheckedItems(new Array(response.data.length).fill(false));
+        setIsCheckedAll(false);
+        const totalPagesCount = Math.ceil(response.data.length / itemsPerPage);
+        setTotalPages(totalPagesCount);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [setData]);
+
+  const handleUpdateData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/client');
+      setData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des données :', error);
+    }
+  };
+
 
   const handleEllipsisClick = (index, event) => {
     const iconRect = event.target.getBoundingClientRect();
@@ -91,56 +104,67 @@ export default function Client() {
   // Calculer le nombre total de pages
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
+  const [showAddClientDialog, setShowAddClientDialog] = useState(false);
+
   return (
-    <div className="overflow-x-auto m-4 bg-white rounded-lg p-4">
+    <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
       <div className="flex justify-between mb-4">
         <p className="text-2xl text-slate-700">Liste des clients</p>
         <div>
-          <button className="bg-pink-500 text-white px-4 mr-2 py-2 rounded hover:bg-pink-600"> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un client</button>
-          <button className="bg-slate-100 px-4 py-2 rounded hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer tout</button>
+        <button  className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddClientDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un client</button>
+          <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer tout</button>
         </div>
       </div>
       <table className="table-auto min-w-full z-3">
-        <thead className='text-pink-500 text-left'>
+        <thead className='text-left text-slate-900 border-t border-slate-100'>
           <tr>
             {/* En-têtes de colonne avec options de tri */}
             <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('num_client')}>
-              #<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'num_client' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_client')}>
+              #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_client' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('nom')}>
-              Nom<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('nom')}>
+              NOM<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('adresse')}>
-              Adresse<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'adresse' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('adresse')}>
+              ADRESSE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'adresse' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('email')}>
-              Email<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'email' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('email')}>
+              EMAIL<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'email' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4" onClick={() => handleSort('telephone')}>
-              Téléphone<FontAwesomeIcon className="float-right text-pink-200 hover:text-pink-600" icon={sortColumn === 'telephone' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('telephone')}>
+              TEL<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'telephone' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4"></th>
+            <th className="px-4 py-4 font-semibold"></th>
           </tr>
         </thead>
         <tbody>
           {/* Afficher les données paginées */}
           {paginatedData.map((client, index) => (
-            <tr key={index}>
+            <tr key={index} className=' text-slate-600 font-semibold'>
               {/* Contenu de chaque ligne */}
-              <td className="border-t border-slate-200 px-4 py-4">
+              <td className="border-t border-slate-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
               </td>
-              <td className="border-t border-slate-200 px-4 py-4">{client.num_client}</td>
-              <td className="border-t border-slate-200 px-4 py-4">{client.nom}</td>
-              <td className="border-t border-slate-200 px-4 py-4">{client.adresse}</td>
-              <td className="border-t border-slate-200 px-4 py-4">{client.email}</td>
-              <td className="border-t border-slate-200 px-4 py-4">{client.telephone}</td>
-              <td className="border-t border-slate-200 text-slate-500 px-4 py-4 hover:text-slate-700"><FontAwesomeIcon icon={faPencil} /></td>
-              <td className="border-t border-slate-200 text-slate-500 px-4 py-4 hover:text-slate-700"><FontAwesomeIcon icon={faTrash} /></td>
-              <td className="border-t border-slate-200 text-slate-500 px-4 py-4 hover:text-slate-700"><FontAwesomeIcon icon={faEllipsisH} /></td>
+              <td className="border-t border-slate-100 px-4 py-4">{client.num_client}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{client.nom}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{client.adresse}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{client.email}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{client.telephone}</td>
+              <td className="border-t border-slate-100 text-teal-500 px-4 py-4 hover:text-teal-400">
+                <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6'>
+                <FontAwesomeIcon className='w-4 h-4 w-3 p-1 text-white' icon={faPencil} />
+                </div>
+                
+              </td>
+              <td className="border-t border-slate-'00 text-red-400 px-4 py-4 hover:text-red-600">
+                <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
+                <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
+                </div>
+                      
+                </td>
             </tr>
           ))}
         </tbody>
@@ -149,22 +173,22 @@ export default function Client() {
       {/* Pagination */}
         <div className="flex justify-between mt-4">
         <div>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </button>
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">Préc</button>
+          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Préc</button>
         </div>
         <div>
           <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
         </div>
         <div>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">Suiv</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-pink-500 px-2 py-1 rounded hover:bg-pink-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Suiv</button>
+          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </button>
         </div>
       </div>
-   
+      {showAddClientDialog && <AddClient onClose={() => setShowAddClientDialog(false)} updateData={handleUpdateData} />} 
     </div>
   );
 }
