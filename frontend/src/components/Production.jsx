@@ -3,25 +3,27 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from './TableFunctions';
-import AddProduction from './AddProduction';
+import AddProduction from './AddProduction'; 
+import EditProduction from './EditProduction';
 
 export default function Production() {
-  const [sortType, setSortType] = useState('asc');
-  const [sortColumn, setSortColumn] = useState('');
-  const [itemsPerPage] = useState(7);
-  const [currentPage, setCurrentPage] = useState(1);
-  
+  const [selectedProduction, setSelectedProduction] = useState(null);
+
   const {
     data,
     setData,
     setShowDialogIndex,
     setDialogPosition,
   } = useTableFunctions();
+  const [totalPages, setTotalPages] = useState(0);
+  const [sortType, setSortType] = useState('asc');
+  const [sortColumn, setSortColumn] = useState('');
+  const [itemsPerPage] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isCheckedAll, setIsCheckedAll] = useState(false);
+  const [checkedItems, setCheckedItems] = useState([]);
 
-  const [isCheckedAll, setIsCheckedAll] = useState(false); // État pour suivre si toutes les cases sont cochées
-  const [checkedItems, setCheckedItems] = useState([]); // État pour suivre les cases cochées
-
-   useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/production');
@@ -47,18 +49,6 @@ export default function Production() {
     }
   };
 
-  const [showAddProductionDialog, setShowAddProductionDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
-
-
-  const handleSort = (columnName) => {
-    if (columnName === sortColumn) {
-      setSortType(sortType === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortColumn(columnName);
-      setSortType('asc');
-    }
-  };
-
   const handleCheckItem = (index) => {
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = !newCheckedItems[index];
@@ -71,11 +61,21 @@ export default function Production() {
     setIsCheckedAll(!isCheckedAll);
   };
 
+  const [showAddProductionDialog, setShowAddProductionDialog] = useState(false);
+
   useEffect(() => {
     setIsCheckedAll(checkedItems.every(item => item));
   }, [checkedItems]);
 
-  // Filtrer et trier les données en fonction de la colonne et du type de tri
+  const handleSort = (columnName) => {
+    if (columnName === sortColumn) {
+      setSortType(sortType === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(columnName);
+      setSortType('asc');
+    }
+  };
+
   const sortedData = data.slice().sort((a, b) => {
     const columnA = a[sortColumn];
     const columnB = b[sortColumn];
@@ -90,27 +90,38 @@ export default function Production() {
     return sortType === 'desc' ? comparison * -1 : comparison;
   });
 
-  // Calculer l'index de début et de fin des éléments à afficher pour la page actuelle
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedData = sortedData.slice(startIndex, endIndex);
 
-  // Calculer le nombre total de pages
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+  const [selectedProductionId, setSelectedProductionId] = useState(null);
+  const [showEditProductionDialog, setShowEditProductionDialog] = useState(false);
+  const handleEditProduction = async (num_prod) => {
+    try {
+      setSelectedProductionId(num_prod);
+      // Récupérer les données de la production à éditer
+      const response = await axios.get(`http://localhost:3000/production/${num_prod}`);
+      // Mettre à jour selectedProduction avec les données de la production à éditer
+      setSelectedProduction(response.data);
+      // Afficher la boîte de dialogue pour l'édition de la production
+      setShowEditProductionDialog(true);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données du production à modifier :', error);
+    }
+  };
 
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
       <div className="flex justify-between mb-4">
         <p className="text-2xl text-slate-700">Liste des productions</p>
         <div>
-        <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddProductionDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
-          <button className="bg-slate-100 px-4 py-2 rounded-xl hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer tout</button>
+          <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddProductionDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
+          <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button>
         </div>
       </div>
       <table className="table-auto min-w-full z-3">
         <thead className='text-slate-900 text-left border-t border-slate-100'>
           <tr>
-            {/* En-têtes de colonne avec options de tri */}
             <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
             </th>
@@ -126,12 +137,14 @@ export default function Production() {
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('date_prod')}>
               DATE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
+            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('region')}>
+              REGION<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            </th>
             <th className="px-4 py-4"></th>
             <th></th>
           </tr>
         </thead>
         <tbody className="text-gray-600 divide-y">
-          {/* Affichage des données paginées */}
           {paginatedData.map((item, index) => (
             <tr key={index} className=' text-slate-600 font-semibold'>
               <td className="border-t border-slate-100 px-4 py-4">
@@ -141,23 +154,24 @@ export default function Production() {
               <td className="border-t border-slate-100 px-4 py-4">{item.vin}</td>
               <td className="border-t border-slate-100 px-4 py-4">{item.quantite}</td>
               <td className="border-t border-slate-100 px-4 py-4">{item.date_prod}</td>
-              <td className="border-t border-slate-100 text-teal-500 px-4 py-4 hover:text-teal-400">
-                <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6'>
-                <FontAwesomeIcon className='w-4 h-4 w-3 p-1 text-white' icon={faPencil} />
-                </div>
-                
+              <td className="border-t border-slate-100 px-4 py-4">{item.region}</td>
+              <td className="border-t border-slate-100  px-4 py-4 hover:text-teal-400">
+                <button onClick={() => handleEditProduction(item.num_prod)}>
+                  <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6 flex items-center justify-center'>
+                    <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faPencil} />
+                  </div>
+                </button>
               </td>
-              <td className="border-t border-slate-'00 text-red-400 px-4 py-4 hover:text-red-600">
+              <td className="border-t border-slate-100 text-red-400 px-4 py-4 hover:text-red-600">
                 <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
-                <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
+                  <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
                 </div>
-                      
-                </td>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {/* Pagination */}
+
       <div className="flex justify-between mt-4">
         <div>
           <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
@@ -175,7 +189,17 @@ export default function Production() {
           </button>
         </div>
       </div>
-      {showAddProductionDialog && <AddProduction onClose={() => setShowAddProductionDialog(false)} updateData={handleUpdateData} />} 
+
+      {showAddProductionDialog && <AddProduction onClose={() => setShowAddProductionDialog(false)} updateData={handleUpdateData} />}
+      {showEditProductionDialog && (
+        <EditProduction
+          onClose={() => setShowEditProductionDialog(false)}
+          updateData={handleUpdateData}
+          productionId={selectedProductionId}
+          productionData={selectedProduction} // Transmettre les données de la production sélectionnée
+        />
+      )}
+
     </div>
   );
 }

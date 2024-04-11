@@ -105,7 +105,7 @@ export default function AddVin({ onClose, updateData }) {
     onChange={(event) => {
       loadFile(event);
       handleChange(event);
-    }}s
+    }}
     className="hidden"
     required
   />

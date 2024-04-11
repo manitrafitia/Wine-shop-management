@@ -49,7 +49,20 @@ export default function Vin() {
     }
   };
 
+// Déclarez un état pour suivre l'ID du vin sélectionné pour la modification
+const [selectedVinId, setSelectedVinId] = useState(null);
 
+// Fonction pour afficher le composant EditVin avec les données du vin sélectionné
+const handleEditVin = async (num_vin, nom) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/vin/${num_vin}`);
+    setSelectedVinData(response.data);
+    setSelectedVinId(num_vin); // Définissez l'ID du vin sélectionné
+    setShowEditVinDialog(true); // Afficher le composant EditVin
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données du vin à modifier :', error);
+  }
+};
   const handleCheckItem = (index) => {
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = !newCheckedItems[index];
@@ -113,18 +126,9 @@ export default function Vin() {
   const paginatedData = sortedData.slice(startIndex, endIndex);
 
   const [vinToEdit, setVinToEdit] = useState(null);
-  const [selectedVinId, setSelectedVinId] = useState(null); // État pour stocker l'ID du vin sélectionné pour la modification
+
   const [showEditVinDialog, setShowEditVinDialog] = useState(false);
-  const handleEditVin = async (num_vin, nom) => {
-    try {
-      const response = await axios.get(`http://localhost:3000/vin/${num_vin}`);
-      setSelectedVinData(response.data);
-      setShowEditVinDialog(true);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des données du vin à modifier :', error);
-    }
-  };
-  
+
   
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
@@ -210,13 +214,13 @@ export default function Vin() {
       </div>
       {showAddVinDialog && <AddVin onClose={() => setShowAddVinDialog(false)} updateData={handleUpdateData} />} 
       {showEditVinDialog && (
-  <EditVin
-    onClose={() => setShowEditVinDialog(false)}
-    updateData={handleUpdateData}
-    vinId={selectedVinId}
-    vinData={selectedVinData}
-  />
-)}
+        <EditVin
+          onClose={() => setShowEditVinDialog(false)}
+          updateData={handleUpdateData}
+          vinId={selectedVinId}
+          vinData={selectedVinData}
+        />
+      )}
 
     </div>
   );
