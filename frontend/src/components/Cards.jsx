@@ -4,30 +4,46 @@ import { faCoins, faWineBottle, faWineGlass, faUserGroup } from '@fortawesome/fr
 import axios from 'axios';
 
 export default function Cards() {
-    const [chiffreAffaires, setChiffreAffaires] = useState(null);
-    const [nombreBouteillesVendues, setNombreBouteillesVendues] = useState(null);
-    const [totalQuantiteProduite, setTotalQuantiteProduite] = useState(null);
-    const [totalClients, setTotalClients] = useState(null);
+  const [chiffreAffaires, setChiffreAffaires] = useState(null);
+  const [nombreBouteillesVendues, setNombreBouteillesVendues] = useState(null);
+  const [totalQuantiteProduite, setTotalQuantiteProduite] = useState(null);
+  const [totalClients, setTotalClients] = useState(null);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const salesResponse = await axios.get('http://localhost:3000/vente/total');
-                setChiffreAffaires(salesResponse.data.chiffreAffaires);
-                setNombreBouteillesVendues(salesResponse.data.nombreBouteillesVendues);
+  useEffect(() => {
+      async function fetchData() {
+          try {
+              const salesResponse = await axios.get('http://localhost:3000/vente/total');
+              animateNumber(salesResponse.data.chiffreAffaires, setChiffreAffaires);
+              animateNumber(salesResponse.data.nombreBouteillesVendues, setNombreBouteillesVendues);
 
-                const productionResponse = await axios.get('http://localhost:3000/production/total');
-                setTotalQuantiteProduite(productionResponse.data.totalQuantiteProduite);
+              const productionResponse = await axios.get('http://localhost:3000/production/total');
+              animateNumber(productionResponse.data.totalQuantiteProduite, setTotalQuantiteProduite);
 
-                const clientsResponse = await axios.get('http://localhost:3000/client/total');
-                setTotalClients(clientsResponse.data.totalClients);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
+              const clientsResponse = await axios.get('http://localhost:3000/client/total');
+              animateNumber(clientsResponse.data.totalClients, setTotalClients);
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      }
 
-        fetchData();
-    }, []);
+      fetchData();
+  }, []);
+
+  // Fonction pour animer le nombre progressivement
+  const animateNumber = (finalValue, setValue) => {
+      let currentValue = 0;
+      const increment = Math.ceil(finalValue / 50); // Nombre d'incrément pour atteindre la valeur finale
+
+      const interval = setInterval(() => {
+          if (currentValue < finalValue) {
+              setValue(currentValue);
+              currentValue += increment;
+          } else {
+              setValue(finalValue);
+              clearInterval(interval); // Arrêter l'intervalle une fois que la valeur finale est atteinte
+          }
+      }, 20); // Intervalle de mise à jour (en millisecondes)
+  };
   return (
     <div className="flex justify-center">
       <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
@@ -38,7 +54,7 @@ export default function Cards() {
           </div>
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-slate-500">
+          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-slate-900">
             <FontAwesomeIcon className='p-3' icon={faCoins} />
           </div>
         </div>
@@ -51,7 +67,7 @@ export default function Cards() {
         <p className="text-xl   font-bold ">{nombreBouteillesVendues !== null ? nombreBouteillesVendues : 'Chargement en cours...'}</p>
         </div>
       </div>
-      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-slate-500">
+      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-wine-700">
         <FontAwesomeIcon className='p-3' icon={faWineBottle} />
       </div>
     </div>
@@ -65,7 +81,7 @@ export default function Cards() {
         
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-slate-500 rounded-xl text-white">
+          <div className="ml-7 w-10 h-10 bg-slate-900 rounded-xl text-white">
             <FontAwesomeIcon className='p-3' icon={faWineGlass} />
           </div>
         </div>
@@ -79,7 +95,7 @@ export default function Cards() {
           </div>     
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-slate-500 rounded-xl text-white">
+          <div className="ml-7 w-10 h-10 bg-wine-700 rounded-xl text-white">
             <FontAwesomeIcon className='p-3' icon={faUserGroup} />
           </div>
         </div>

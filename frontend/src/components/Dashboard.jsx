@@ -2,6 +2,9 @@ import React from 'react';
 import Chart from '../components/Chart';
 import Cards from '../components/Cards';
 import List from './List';
+import Catalogue from './Catalogue';
+
+
 
 export default function Dashboard() {
   return (

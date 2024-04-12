@@ -5,11 +5,32 @@ import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, f
 import useTableFunctions from './TableFunctions';
 import AddProduction from './AddProduction'; 
 import EditProduction from './EditProduction';
+import ConfirmDelete from './ConfirmDelete'; 
+import Success from './Success'
 
 export default function Production() {
   const [searchValue, setSearchValue] = useState(''); // 1. Ajoutez un état pour stocker la valeur de recherche.
   const [selectedProduction, setSelectedProduction] = useState(null);
+  const [productionToDelete, setProductionToDelete] = useState(null);
+  const handleDeleteProduction = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/production/${productionToDelete.num_prod}`);
+      handleUpdateData(); // Mettre à jour les données après la suppression
+      setShowConfirmDeleteDialog(false); 
+      showSuccessMessage(); // Fermer la boîte de dialogue de confirmation
+    } catch (error) {
+      console.error('Erreur lors de la suppression du vin :', error);
+    }
+  };
+  const [showSuccess, setShowSuccess] = useState(false); // État pour contrôler l'affichage du composant Success
 
+  // Fonction pour afficher le composant Success
+  const showSuccessMessage = () => {
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 2000); // Masquer le composant Success après 2 secondes
+  };
   const {
     data,
     setData,
@@ -119,6 +140,18 @@ export default function Production() {
     setSearchValue(event.target.value); // 3. Mettre à jour la valeur de recherche lors de la saisie dans l'entrée de recherche.
   };
 
+  const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false);
+  const handleOpenConfirmDeleteDialog = (production) => {
+    setProductionToDelete(production); // Correction ici : changer production en item
+    setShowConfirmDeleteDialog(true);
+  };
+  
+  
+  const handleCloseConfirmDeleteDialog = () => {
+    setShowConfirmDeleteDialog(false);
+  };
+  
+
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
          <p className="text-2xl text-slate-700">Liste des productions</p>
@@ -180,11 +213,10 @@ export default function Production() {
                 Modifier
                 </button>
               </td>
-              
               <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
-                Supprimer
-                      
-                </td>
+              <button onClick={() => handleOpenConfirmDeleteDialog(item)}>Supprimer</button>
+
+</td>
     
             </tr>
           ))}
@@ -218,7 +250,10 @@ export default function Production() {
           productionData={selectedProduction} // Transmettre les données de la production sélectionnée
         />
       )}
-
+       {showSuccess && <Success />}
+{showConfirmDeleteDialog && <ConfirmDelete onClose={handleCloseConfirmDeleteDialog} onDelete={handleDeleteProduction} />}
     </div>
+
+    
   );
 }

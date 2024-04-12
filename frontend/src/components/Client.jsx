@@ -6,7 +6,7 @@ import useTableFunctions from './TableFunctions';
 import AddClient from './AddClient'; 
 import EditClient from './EditClient';
 import ConfirmDelete from './ConfirmDelete'; // Assurez-vous que le chemin d'importation est correct
-
+import Success from './Success'
 
 export default function Client() {
   const [searchValue, setSearchValue] = useState('');
@@ -26,6 +26,17 @@ export default function Client() {
   const [isCheckedAll, setIsCheckedAll] = useState(false); // État pour suivre si toutes les cases sont cochées
   const [checkedItems, setCheckedItems] = useState([]); // État pour suivre les cases cochées
 
+  const [clientToDelete, setClientToDelete] = useState(null);
+  const handleDeleteClient = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/client/${clientToDelete.num_client}`);
+      handleUpdateData(); // Mettre à jour les données après la suppression
+      setShowConfirmDeleteDialog(false);
+      showSuccessMessage(); // Fermer la boîte de dialogue de confirmation
+    } catch (error) {
+      console.error('Erreur lors de la suppression du vin :', error);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -140,14 +151,25 @@ const handleEditClient = async (num_client, nom) => {
   const [showAddClientDialog, setShowAddClientDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un client
   const [showEditClientDialog, setShowEditClientDialog] = useState(false);
   const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false);
-  const handleOpenConfirmDeleteDialog = () => {
+  const handleOpenConfirmDeleteDialog = (client) => {
+    setClientToDelete(client);
     setShowConfirmDeleteDialog(true);
   };
+  
+  
   
   const handleCloseConfirmDeleteDialog = () => {
     setShowConfirmDeleteDialog(false);
   };
-  
+  const [showSuccess, setShowSuccess] = useState(false); // État pour contrôler l'affichage du composant Success
+
+  // Fonction pour afficher le composant Success
+  const showSuccessMessage = () => {
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 2000); // Masquer le composant Success après 2 secondes
+  };
   
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
@@ -213,9 +235,8 @@ const handleEditClient = async (num_client, nom) => {
                 </button>
               </td>
               <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
-  <button onClick={handleOpenConfirmDeleteDialog}>
-    Supprimer
-  </button>
+              <button onClick={() => handleOpenConfirmDeleteDialog(client)}>Supprimer</button>
+
 </td>
 
             </tr>
@@ -250,8 +271,8 @@ const handleEditClient = async (num_client, nom) => {
           clientData={selectedClientData}
         />
       )}
-{showConfirmDeleteDialog && <ConfirmDelete onClose={handleCloseConfirmDeleteDialog} />}
-
+{showSuccess && <Success />}
+{showConfirmDeleteDialog && <ConfirmDelete onClose={handleCloseConfirmDeleteDialog} onDelete={handleDeleteClient} />}
     </div>
   );
 }

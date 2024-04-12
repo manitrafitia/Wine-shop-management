@@ -32,7 +32,7 @@ export default function SalesChart() {
 
   const chartConfig = {
     type: "bar",
-    height: 240,
+    height: 270,
     series: [
       {
         name: "Ventes",
@@ -51,10 +51,10 @@ export default function SalesChart() {
       dataLabels: {
         enabled: false,
       },
-      colors: ["#0E0E0E"],
+      colors: ["#0F172A"],
       plotOptions: {
         bar: {
-          columnWidth: "40%",
+          columnWidth: "50%",
           borderRadius: 2,
         },
       },

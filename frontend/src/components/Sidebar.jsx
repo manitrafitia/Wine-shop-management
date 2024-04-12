@@ -10,7 +10,7 @@ export default function Sidebar({ children }) {
   
   return (
     <aside className="h-screen sticky top-0">
-      <nav className="h-full flex flex-col bg-white shadow-lg w-300">
+      <nav className="h-full flex flex-col bg-slate-900 shadow-lg w-300">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
              src={Logo} 
@@ -28,7 +28,7 @@ export default function Sidebar({ children }) {
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3">{children}</ul>
+          <ul className="flex-1 mt-5 px-3">{children}</ul>
         </SidebarContext.Provider>
 
         <div className="border-t flex p-3">
@@ -61,17 +61,17 @@ export function SidebarItem({ icon, text, active, alert }) {
   return (
     <li
       className={`
-        relative flex items-center py-3 px-3 my-1
+        relative flex items-center p-2 my-1 
         font-medium rounded-lg cursor-pointer ml-2
-        transition-colors group
+        transition-colors group text-gray-200
         ${
           active
-            ? "shadow-md bg-ziggurat-400 text-white"
-            : "hover:bg-slate-100 text-slate-600"
+            ? "shadow-md bg-wine-700 text-white"
+            : "hover:bg-slate-800 text-slate-600"
         }
     `}
     >
-      <FontAwesomeIcon icon={icon} />
+      <FontAwesomeIcon  icon={icon} />
       <span
         className={`overflow-hidden transition-all text-left ${
           expanded ? "w-40 ml-10" : "w-0"
@@ -92,7 +92,7 @@ export function SidebarItem({ icon, text, active, alert }) {
         <div
           className={`
           absolute left-full rounded-md px-2 py-1 ml-6
-          bg-white text-slate-800 text-sm
+          bg-slate-900 text-white text-sm
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}

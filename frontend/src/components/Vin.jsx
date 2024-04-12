@@ -5,10 +5,15 @@ import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, f
 import useTableFunctions from './TableFunctions';
 import AddVin from './AddVin'; 
 import EditVin from './EditVin';
+import ConfirmDelete from './ConfirmDelete'; 
+import Success from './Success'
+
 
 export default function Vin() {
   const [searchValue, setSearchValue] = useState('');
   const [selectedVinData, setSelectedVinData] = useState(null);
+  const [vinToDelete, setVinToDelete] = useState(null);
+
 
   const {
     data,
@@ -24,6 +29,19 @@ export default function Vin() {
   const [isCheckedAll, setIsCheckedAll] = useState(false); // État pour suivre si toutes les cases sont cochées
   const [checkedItems, setCheckedItems] = useState([]); // État pour suivre les cases cochées
 
+
+  const handleDeleteVin = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/vin/${vinToDelete.num_vin}`);
+      handleUpdateData(); // Mettre à jour les données après la suppression
+      setShowConfirmDeleteDialog(false); // Fermer la boîte de dialogue de confirmation
+      showSuccessMessage();
+    } catch (error) {
+      console.error('Erreur lors de la suppression du vin :', error);
+    }
+  };
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -134,7 +152,27 @@ export default function Vin() {
   const [showAddVinDialog, setShowAddVinDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
   const [showEditVinDialog, setShowEditVinDialog] = useState(false);
 
+  const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false);
+  const handleOpenConfirmDeleteDialog = (vin) => {
+    setVinToDelete(vin);
+    setShowConfirmDeleteDialog(true);
+  };
   
+  
+  const handleCloseConfirmDeleteDialog = () => {
+    setShowConfirmDeleteDialog(false);
+  };
+  
+  const [showSuccess, setShowSuccess] = useState(false); // État pour contrôler l'affichage du composant Success
+
+  // Fonction pour afficher le composant Success
+  const showSuccessMessage = () => {
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 2000); // Masquer le composant Success après 2 secondes
+  };
+
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
       <p className="text-2xl text-slate-700">Liste des vins</p>
@@ -156,6 +194,7 @@ export default function Vin() {
       <table className="table-auto min-w-full z-3">
         <thead className='text-left text-slate-900 border-t border-slate-100'>
           <tr>
+            <th></th>
             {/* <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
             </th> */}
@@ -193,8 +232,12 @@ export default function Vin() {
                 </button>
               </td>
               <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
-                Supprimer
-              </td>
+              <button onClick={() => handleOpenConfirmDeleteDialog(vin)}>
+  Supprimer
+</button>
+
+
+</td>
             </tr>
           ))}
         </tbody>
@@ -227,6 +270,8 @@ export default function Vin() {
           vinData={selectedVinData}
         />
       )}
+ {showConfirmDeleteDialog && <ConfirmDelete onClose={handleCloseConfirmDeleteDialog} onDelete={handleDeleteVin} />}
+ {showSuccess && <Success />}
     </div>
   );
 }

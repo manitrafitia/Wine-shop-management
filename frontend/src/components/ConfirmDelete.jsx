@@ -1,14 +1,30 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faCircleExclamation, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function ConfirmDelete({ onClose }) {
+export default function ConfirmDelete({ onClose, onDelete }) {
+
+ const dialogRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dialogRef.current && !dialogRef.current.contains(event.target)) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
-        <div className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10 p-10 '>
+        <div  ref={dialogRef} className='rounded-xl bg-white w-600 max-w-md md:max-w-lg lg:max-w-xl z-10 p-10  '>
             <div className='flex justify-center items-center mb-4'>
-            <FontAwesomeIcon className='text-red-500 w-10 h-10' onClick={onClose} icon={faCircleExclamation} />
+              <img src="system-regular-29-cross.gif" className='text-red-500 w-10' alt="" />
+          
             </div>
             <div>
               <div className='flex justify-center items-center mb-2'>
@@ -32,9 +48,11 @@ export default function ConfirmDelete({ onClose }) {
               Fermer
             </button>
             <button
-              type='submit'
-              className='w-1/2 bg-red-500 text-white ml-2 py-2 rounded hover:bg-red-600'
-            >Supprimer</button>
+  type='submit'
+  onClick={onDelete}
+  className='w-1/2 bg-red-500 text-white ml-2 py-2 rounded hover:bg-red-600'
+>Supprimer</button>
+
             </div>
         </div>
         </div>

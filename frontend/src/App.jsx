@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Sidebar, { SidebarItem } from './components/Sidebar';
 import Vin from './components/Vin'; // Importez le composant Vin
-import { faTable, faMartiniGlass, faUserGroup, faStore, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faTable, faMartiniGlass, faUserGroup, faStore, faHome, faChartBar } from '@fortawesome/free-solid-svg-icons';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Production from './components/Production';
@@ -57,6 +57,13 @@ function App() {
               icon={faStore}
               text="Ventes"
               active={currentPage === 'Vente'}
+            />
+          </button>
+          <br />
+          <button onClick={() => handleSidebarItemClick('')}>
+            <SidebarItem
+              icon={faChartBar}
+              text="Graphiques"
             />
           </button>
         </Sidebar>
