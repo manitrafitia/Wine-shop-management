@@ -7,6 +7,7 @@ import AddProduction from './AddProduction';
 import EditProduction from './EditProduction';
 
 export default function Production() {
+  const [searchValue, setSearchValue] = useState(''); // 1. Ajoutez un état pour stocker la valeur de recherche.
   const [selectedProduction, setSelectedProduction] = useState(null);
 
   const {
@@ -90,9 +91,13 @@ export default function Production() {
     return sortType === 'desc' ? comparison * -1 : comparison;
   });
 
+  const filteredData = sortedData.filter((item) =>
+    item.vin.toLowerCase().includes(searchValue.toLowerCase()) // 2. Filtrer les données en fonction de la valeur de recherche.
+  );
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedData = sortedData.slice(startIndex, endIndex);
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
   const [selectedProductionId, setSelectedProductionId] = useState(null);
   const [showEditProductionDialog, setShowEditProductionDialog] = useState(false);
@@ -110,10 +115,23 @@ export default function Production() {
     }
   };
 
+  const handleInputChange = (event) => {
+    setSearchValue(event.target.value); // 3. Mettre à jour la valeur de recherche lors de la saisie dans l'entrée de recherche.
+  };
+
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-      <div className="flex justify-between mb-4">
-        <p className="text-2xl text-slate-700">Liste des productions</p>
+         <p className="text-2xl text-slate-700">Liste des productions</p>
+      <div className="flex justify-between mb-4 mt-4">
+        <div>
+        <input
+        type="text"
+        value={searchValue}
+        onChange={handleInputChange}
+        placeholder="Rechercher..."
+        className="w-auto border border-slate-200 rounded-2xl px-4 py-2"
+      />
+        </div>
         <div>
           <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddProductionDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
           <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button>
@@ -122,12 +140,13 @@ export default function Production() {
       <table className="table-auto min-w-full z-3">
         <thead className='text-slate-900 text-left border-t border-slate-100'>
           <tr>
-            <th className="px-4 py-4">
+            {/* <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
-            </th>
+            </th> */}
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_prod')}>
               #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
+            
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('vin')}>
               VIN<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
@@ -146,27 +165,27 @@ export default function Production() {
         </thead>
         <tbody className="text-gray-600 divide-y">
           {paginatedData.map((item, index) => (
-            <tr key={index} className=' text-slate-600 font-semibold'>
-              <td className="border-t border-slate-100 px-4 py-4">
+            <tr key={index} className='  text-slate-900 text-sm'>
+              {/* <td className="border-t border-slate-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
-              </td>
+              </td> */}
               <td className="border-t border-slate-100 px-4 py-4">{item.num_prod}</td>
+             
               <td className="border-t border-slate-100 px-4 py-4">{item.vin}</td>
               <td className="border-t border-slate-100 px-4 py-4">{item.quantite}</td>
               <td className="border-t border-slate-100 px-4 py-4">{item.date_prod}</td>
               <td className="border-t border-slate-100 px-4 py-4">{item.region}</td>
-              <td className="border-t border-slate-100  px-4 py-4 hover:text-teal-400">
+              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
                 <button onClick={() => handleEditProduction(item.num_prod)}>
-                  <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6 flex items-center justify-center'>
-                    <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faPencil} />
-                  </div>
+                Modifier
                 </button>
               </td>
-              <td className="border-t border-slate-100 text-red-400 px-4 py-4 hover:text-red-600">
-                <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
-                  <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
-                </div>
-              </td>
+              
+              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+                Supprimer
+                      
+                </td>
+    
             </tr>
           ))}
         </tbody>

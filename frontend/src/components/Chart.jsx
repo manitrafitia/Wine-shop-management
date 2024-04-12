@@ -51,7 +51,7 @@ export default function SalesChart() {
       dataLabels: {
         enabled: false,
       },
-      colors: ["#458795"],
+      colors: ["#0E0E0E"],
       plotOptions: {
         bar: {
           columnWidth: "40%",
@@ -124,20 +124,12 @@ export default function SalesChart() {
   return (
     <div className="bg-white rounded-xl p-7 shadow-lg">
       <div className="flex flex-col md:flex-row md:items-center gap-4">
-        <div className="w-max rounded-lg bg-ziggurat-500 p-5 text-white">
-          <Square3Stack3DIcon className="h-6 w-6" />
-        </div>
         <div>
-          <h6 className="font-bold text-xl">Bouteilles vendues par mois</h6>
-          <p className=" max-w-sm font-normal">
-            Ce diagramme illustre le déroulement des ventes sur
-            <span className="font-bold text-vinRouge-600 mx-2 ">Vinomarket</span>
-            au cours de l'année
-            <span className="ml-2 font-bold text-vinRouge-600">2024</span>.
-          </p>
+          <h6 className="font-bold text-xl mb-4">Bouteilles vendues par mois</h6>
+        
         </div>
       </div>
-      <div className="px-2 pb-0">
+      <div className="px-2 pb-0 mb-4">
         {loading ? (
           <p>Loading...</p>
         ) : (

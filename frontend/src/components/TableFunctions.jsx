@@ -69,7 +69,7 @@ const useTableFunctions = () => {
   };
 
   const paginate = (pageNumber) => {
-    const itemsPerPage = 7;
+    const itemsPerPage = 10;
     const startIndex = (pageNumber - 1) * itemsPerPage; // Indice de début des éléments pour la page actuelle
     const endIndex = startIndex + itemsPerPage; // Indice de fin des éléments pour la page actuelle
     const slicedData = sortedData.slice(startIndex, endIndex); // Extraire les éléments à afficher pour la page actuelle

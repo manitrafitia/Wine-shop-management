@@ -77,17 +77,17 @@ export default function AddProduction({ onClose, updateData }) {
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
       <div ref={dialogRef} className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10'>
-        <div className="flex p-3 mb-2 bg-slate-100 pb-4 rounded-t-xl ">
+        <div className="flex p-3 mb-4 bg-slate-100 pb-4 rounded-t-xl ">
           <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Ajouter une production</h2>
           <FontAwesomeIcon className='mt-2  mx-2 hover:text-slate-400' onClick={onClose} icon={faTimes} />
         </div>
-        <form onSubmit={handleSubmit} className='text-slate-400 font-semibold mx-2  p-5'>
-          <label htmlFor="" className='mb-2'>Vin </label>
+        <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-5'>
+          <label htmlFor="" className='mb-4'>Vin </label>
           <select
             name='vin'
             value={productionData.vin}
             onChange={handleChange}
-            className='w-full p-2 mb-3 border border-slate-200 rounded'
+            className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
             required
           >
             <option value="">Sélectionnez un vin</option>
@@ -97,39 +97,39 @@ export default function AddProduction({ onClose, updateData }) {
           </select>
           <div className="flex">
             <div>
-              <label htmlFor="" className='mb-2'>Quantité </label>
+              <label htmlFor="" className='mb-4'>Quantité </label>
               <input
                 type='number'
                 name='quantite'
                 value={productionData.quantite}
                 onChange={handleChange}
-                className='w-full p-2 mb-3 border border-slate-200 rounded'
+                className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
                 required
               />
             </div>
             <div className='ml-2'>
-              <label htmlFor="" className='mb-2'>Date de production </label>
+              <label htmlFor="" className='mb-4'>Date de production </label>
               <input
                 type='date'
                 name='date_prod'
                 value={productionData.date_prod}
                 onChange={handleChange}
-                className='w-full p-2 mb-3 border border-slate-200 rounded'
+                className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
                 required
               />
             </div>
           </div>
           <div>
-            <label htmlFor="" className='mb-2'>Région de production </label>
+            <label htmlFor="" className='mb-4'>Région de production </label>
             <input
               name='region'
               value={productionData.region}
               onChange={handleChange}
-              className='w-full p-2 mb-3 border border-slate-200 rounded'
+              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
               required
             />
           </div>
-          <div className='flex justify-between mb-2'>
+          <div className='flex justify-between mb-4'>
             <button
               type='button'
               onClick={onClose}
@@ -139,7 +139,7 @@ export default function AddProduction({ onClose, updateData }) {
             </button>
             <button
               type='submit'
-              className='w-1/2 bg-ziggurat-500 text-white ml-2 py-2 rounded hover:bg-ziggurat-600'
+              className='w-1/2 bg-slate-500 text-white ml-2 py-2 rounded hover:bg-slate-600'
             >
               Ajouter
             </button>

@@ -38,7 +38,7 @@ export default function Cards() {
           </div>
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-vinRouge-500">
+          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-slate-500">
             <FontAwesomeIcon className='p-3' icon={faCoins} />
           </div>
         </div>
@@ -51,7 +51,7 @@ export default function Cards() {
         <p className="text-xl   font-bold ">{nombreBouteillesVendues !== null ? nombreBouteillesVendues : 'Chargement en cours...'}</p>
         </div>
       </div>
-      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-vinRouge-500">
+      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-slate-500">
         <FontAwesomeIcon className='p-3' icon={faWineBottle} />
       </div>
     </div>
@@ -65,7 +65,7 @@ export default function Cards() {
         
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-vinRouge-500 rounded-xl text-white">
+          <div className="ml-7 w-10 h-10 bg-slate-500 rounded-xl text-white">
             <FontAwesomeIcon className='p-3' icon={faWineGlass} />
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function Cards() {
           </div>     
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-vinRouge-500 rounded-xl text-white">
+          <div className="ml-7 w-10 h-10 bg-slate-500 rounded-xl text-white">
             <FontAwesomeIcon className='p-3' icon={faUserGroup} />
           </div>
         </div>

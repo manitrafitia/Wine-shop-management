@@ -22,11 +22,8 @@ export default function List() {
     <>
       <div className="p-7 rounded-2xl bg-white shadow overflow-y-auto max-h-96">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
-          <div className="w-max rounded-lg bg-vinRouge-500 p-5 text-white">
-            <Square3Stack3DIcon className="h-6 w-6" />
-          </div>
           <div>
-            <p className="text-xl font-bold">Stock de vins disponibles</p>
+            <p className="text-xl font-bold ">Stock de vins disponibles</p>
           </div>
         </div>
 

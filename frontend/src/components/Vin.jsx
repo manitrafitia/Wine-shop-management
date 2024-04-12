@@ -7,6 +7,7 @@ import AddVin from './AddVin';
 import EditVin from './EditVin';
 
 export default function Vin() {
+  const [searchValue, setSearchValue] = useState('');
   const [selectedVinData, setSelectedVinData] = useState(null);
 
   const {
@@ -49,20 +50,21 @@ export default function Vin() {
     }
   };
 
-// Déclarez un état pour suivre l'ID du vin sélectionné pour la modification
-const [selectedVinId, setSelectedVinId] = useState(null);
+  // Déclarez un état pour suivre l'ID du vin sélectionné pour la modification
+  const [selectedVinId, setSelectedVinId] = useState(null);
 
-// Fonction pour afficher le composant EditVin avec les données du vin sélectionné
-const handleEditVin = async (num_vin, nom) => {
-  try {
-    const response = await axios.get(`http://localhost:3000/vin/${num_vin}`);
-    setSelectedVinData(response.data);
-    setSelectedVinId(num_vin); // Définissez l'ID du vin sélectionné
-    setShowEditVinDialog(true); // Afficher le composant EditVin
-  } catch (error) {
-    console.error('Erreur lors de la récupération des données du vin à modifier :', error);
-  }
-};
+  // Fonction pour afficher le composant EditVin avec les données du vin sélectionné
+  const handleEditVin = async (num_vin, nom) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/vin/${num_vin}`);
+      setSelectedVinData(response.data);
+      setSelectedVinId(num_vin); // Définissez l'ID du vin sélectionné
+      setShowEditVinDialog(true); // Afficher le composant EditVin
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données du vin à modifier :', error);
+    }
+  };
+
   const handleCheckItem = (index) => {
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = !newCheckedItems[index];
@@ -74,9 +76,6 @@ const handleEditVin = async (num_vin, nom) => {
     setCheckedItems(newCheckedItems);
     setIsCheckedAll(!isCheckedAll);
   };
-
-
-  const [showAddVinDialog, setShowAddVinDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
 
   useEffect(() => {
     setIsCheckedAll(checkedItems.every(item => item));
@@ -120,31 +119,46 @@ const handleEditVin = async (num_vin, nom) => {
     return sortType === 'desc' ? comparison * -1 : comparison;
   });
 
+  // Filtrer les données en fonction de la valeur de recherche
+  const filteredData = sortedData.filter((vin) =>
+    vin.nom.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   // Calculer l'index de début et de fin des éléments à afficher pour la page actuelle
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedData = sortedData.slice(startIndex, endIndex);
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
   const [vinToEdit, setVinToEdit] = useState(null);
 
+  const [showAddVinDialog, setShowAddVinDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
   const [showEditVinDialog, setShowEditVinDialog] = useState(false);
 
   
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-      <div className="flex justify-between mb-4">
-        <p className="text-2xl text-slate-700">Liste des vins</p>
+      <p className="text-2xl text-slate-700">Liste des vins</p>
+      <div className="flex justify-between mb-4 mt-4">
         <div>
-        <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddVinDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
+          <input 
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="Rechercher ..."
+            className="w-auto border border-slate-200 rounded-2xl px-4 py-2"
+          />
+        </div>
+        <div>
+          <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddVinDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
           <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button>
         </div>
       </div>
       <table className="table-auto min-w-full z-3">
         <thead className='text-left text-slate-900 border-t border-slate-100'>
           <tr>
-            <th className="px-4 py-4">
+            {/* <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-            </th>
+            </th> */}
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_vin')}>
               #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
@@ -164,36 +178,28 @@ const handleEditVin = async (num_vin, nom) => {
         <tbody>
           {/* Afficher les données paginées */}
           {paginatedData.map((vin, index) => (
-            <tr key={index} className='font-semibold text-slate-600'>
-              <td className="border-t border-slate-100 px-4 py-4">
+            <tr key={index} className=' text-slate-900 text-sm'>
+              {/* <td className="border-t border-slate-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-              </td>
+              </td> */}
+              <td className="border-t border-slate-100 px-4 py-4"> <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>       
               <td className="border-t border-slate-100 px-4 py-4">{vin.num_vin}</td>
               <td className="border-t border-slate-100 px-4 py-4">{vin.nom}</td>
               <td className="border-t border-slate-100 px-4 py-4">{vin.prix}</td>
-              <td className={`border-t border-slate-100 px-4 py-4 font-bold`}>{vin.quantite}</td>
-              <td className="border-t border-slate-100 text-teal-500 px-4 py-4 hover:text-teal-400">
-              <button onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
-  <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6 flex items-center justify-center'>
-    <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faPencil} />
-  </div>
-</button>
-
-</td>
-
-              <td className="border-t border-slate-'00 text-red-400 px-4 py-4 hover:text-red-600">
-                <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
-                <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
-                </div>
-                      
-                </td>
-    
+              <td className={`border-t border-slate-100 px-4 py-4`}>{vin.quantite}</td>
+              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900 hover:text-slate-900">
+                <button onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
+                  Modifier
+                </button>
+              </td>
+              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+                Supprimer
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Pagination */}
       {/* Pagination */}
       <div className="flex justify-between mt-4">
         <div>
@@ -221,7 +227,6 @@ const handleEditVin = async (num_vin, nom) => {
           vinData={selectedVinData}
         />
       )}
-
     </div>
   );
 }

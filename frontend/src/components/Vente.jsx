@@ -101,27 +101,12 @@ export default function Vente() {
 
     return sortType === 'desc' ? comparison * -1 : comparison;
   }).map((vente, index) => (
-    <tr key={index} className='font-semibold text-slate-600'>
-      <td>
-        <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-      </td>
+    <tr key={index} className=' text-slate-900 text-sm'>
       <td className="border-t border-gray-200 px-4 py-4">{vente.num_vente}</td>
       <td className="border-t border-gray-200 px-4 py-4">{vente.quantite_vendue}</td>
       <td className="border-t border-gray-200 px-4 py-4">{vente.date}</td>
       <td className="border-t border-gray-200 px-4 py-4">{vente.mode_paiement}</td>
       <td className="border-t border-gray-200 px-4 py-4">{vente.montant_total}</td>
-      <td className="border-t border-slate-100 text-teal-500 px-4 py-4 hover:text-teal-400">
-                <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6'>
-                <FontAwesomeIcon className='w-4 h-4 w-3 p-1 text-white' icon={faPencil} />
-                </div>
-                
-              </td>
-              <td className="border-t border-slate-'00 text-red-400 px-4 py-4 hover:text-red-600">
-                <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
-                <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
-                </div>
-                      
-                </td>
     </tr>
   ));
 
@@ -141,15 +126,13 @@ export default function Vente() {
         <p className="text-2xl text-gray-700">Liste des ventes</p>
         <div>
         <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddVenteDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vente</button>
-          <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer tout</button>
+        
         </div>
       </div>
       <table className="table-auto min-w-full z-3">
         <thead className='text-left text-slate-900 border-t border-slate-100'>
           <tr>
-            <th className="px-4 py-4">
-              <input id="default-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-            </th>
+       
             <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
               #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
@@ -165,7 +148,6 @@ export default function Vente() {
             <th className="px-4 py-4 font-semibold" onClick={() => handleSort('montant_total')}>
               TOTAL<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4"></th>
           </tr>
         </thead>
         <tbody>

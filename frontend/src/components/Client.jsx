@@ -5,8 +5,11 @@ import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, f
 import useTableFunctions from './TableFunctions';
 import AddClient from './AddClient'; 
 import EditClient from './EditClient';
+import ConfirmDelete from './ConfirmDelete'; // Assurez-vous que le chemin d'importation est correct
+
 
 export default function Client() {
+  const [searchValue, setSearchValue] = useState('');
   const [selectedClientData, setSelectedClientData] = useState(null);
 
   const {
@@ -63,6 +66,7 @@ const handleEditClient = async (num_client, nom) => {
     console.error('Erreur lors de la récupération des données du client à modifier :', error);
   }
 };
+
   const handleCheckItem = (index) => {
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = !newCheckedItems[index];
@@ -75,8 +79,9 @@ const handleEditClient = async (num_client, nom) => {
     setIsCheckedAll(!isCheckedAll);
   };
 
-
-  const [showAddClientDialog, setShowAddClientDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un client
+  const handleInputChange = (event) => {
+    setSearchValue(event.target.value);
+  };
 
   useEffect(() => {
     setIsCheckedAll(checkedItems.every(item => item));
@@ -120,22 +125,47 @@ const handleEditClient = async (num_client, nom) => {
     return sortType === 'desc' ? comparison * -1 : comparison;
   });
 
+  // Filtrer les données en fonction de la valeur de recherche
+  const filteredData = sortedData.filter((client) =>
+    client.nom.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   // Calculer l'index de début et de fin des éléments à afficher pour la page actuelle
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedData = sortedData.slice(startIndex, endIndex);
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
   const [clientToEdit, setClientToEdit] = useState(null);
 
+  const [showAddClientDialog, setShowAddClientDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un client
   const [showEditClientDialog, setShowEditClientDialog] = useState(false);
-
+  const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false);
+  const handleOpenConfirmDeleteDialog = () => {
+    setShowConfirmDeleteDialog(true);
+  };
+  
+  const handleCloseConfirmDeleteDialog = () => {
+    setShowConfirmDeleteDialog(false);
+  };
+  
   
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-      <div className="flex justify-between mb-4">
-        <p className="text-2xl text-slate-700">Liste des clients</p>
+         <p className="text-2xl text-slate-700">Liste des clients</p>
+      <div className="flex justify-between mb-4 mt-4">
+     
         <div>
-        <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddClientDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
+        <input
+            type="text"
+            value={searchValue}
+            onChange={handleInputChange}
+            placeholder="Rechercher..."
+            className="w-auto border border-slate-200 rounded-2xl px-4 py-2"
+          />
+        </div>
+        <div>
+     
+          <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddClientDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
           <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button>
         </div>
       </div>
@@ -143,9 +173,9 @@ const handleEditClient = async (num_client, nom) => {
         <thead className='text-left text-slate-900 border-t border-slate-100'>
           <tr>
             {/* En-têtes de colonne avec options de tri */}
-            <th className="px-4 py-4">
+            {/* <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
-            </th>
+            </th> */}
             <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_client')}>
               #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_client' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
@@ -164,41 +194,35 @@ const handleEditClient = async (num_client, nom) => {
             <th className="px-4 py-4 font-semibold"></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className=''>
           {/* Afficher les données paginées */}
           {paginatedData.map((client, index) => (
-            <tr key={index} className=' text-slate-600 font-semibold'>
+            <tr key={index} className=' text-slate-900 text-sm'>
               {/* Contenu de chaque ligne */}
-              <td className="border-t border-slate-100 px-4 py-4">
+              {/* <td className="border-t border-slate-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
-              </td>
+              </td> */}
               <td className="border-t border-slate-100 px-4 py-4">{client.num_client}</td>
               <td className="border-t border-slate-100 px-4 py-4">{client.nom}</td>
               <td className="border-t border-slate-100 px-4 py-4">{client.adresse}</td>
               <td className="border-t border-slate-100 px-4 py-4">{client.email}</td>
               <td className="border-t border-slate-100 px-4 py-4">{client.telephone}</td>
-              <td className="border-t border-slate-100  px-4 py-4 hover:text-teal-400">
-              <button onClick={() => handleEditClient(client.num_client, client.nom)}>
-  <div className='rounded-full bg-teal-500 hover:bg-teal-600 w-6 h-6 flex items-center justify-center'>
-    <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faPencil} />
-  </div>
-</button>
-
+              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+                <button onClick={() => handleEditClient(client.num_client, client.nom)}>
+                  Modifier
+                </button>
+              </td>
+              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+  <button onClick={handleOpenConfirmDeleteDialog}>
+    Supprimer
+  </button>
 </td>
 
-              <td className="border-t border-slate-'00 text-red-400 px-4 py-4 hover:text-red-600">
-                <div className='rounded-full bg-red-500 hover:bg-red-800 w-6 h-6'>
-                <FontAwesomeIcon className='w-3 h-3 w-3 p-1 pl-1.5 text-white' icon={faTrash} />  
-                </div>
-                      
-                </td>
-    
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Pagination */}
       {/* Pagination */}
       <div className="flex justify-between mt-4">
         <div>
@@ -226,6 +250,7 @@ const handleEditClient = async (num_client, nom) => {
           clientData={selectedClientData}
         />
       )}
+{showConfirmDeleteDialog && <ConfirmDelete onClose={handleCloseConfirmDeleteDialog} />}
 
     </div>
   );
