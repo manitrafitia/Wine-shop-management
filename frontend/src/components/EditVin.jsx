@@ -86,36 +86,6 @@ export default function EditVin({ onClose, updateData, vinData: propVinData }) {
         </div>
         <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-5'>
             <div>
-            <div className="flex items-center space-x-6">
-        <div className="shrink-0">
-          <img
-            id='preview_img'
-            className="h-16 w-16 object-cover rounded-full"
-            src="https://media.istockphoto.com/id/527820617/vector/photographs-pictures-icon-on-white-background.jpg?s=612x612&w=0&k=20&c=KeE_j06DJgO7Dkx4l6gqPN6iEKQyWxOuzXjnMY5ul_A="
-            alt="Current profile photo"
-          />
-        </div>
-        <label className="block">
-  <input
-    type="file"
-    onChange={(event) => {
-      loadFile(event);
-      handleChange(event);
-    }}
-    className="hidden"
-    required
-  />
-  <div className=' bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full'>
- <p className="p-2">
- Choisir un image
-  </p>
-  </div>
-</label>
-{selectedFileName && (
-  <p className="text-sm text-gray-500">{selectedFileName}</p>
-)}
-
-      </div>
             </div>
             <label htmlFor="" className='mb-4'>Nom </label>
         <input

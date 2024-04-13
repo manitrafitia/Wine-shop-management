@@ -173,6 +173,20 @@ export default function Vin() {
     }, 2000); // Masquer le composant Success après 2 secondes
   };
 
+  const getTypeLabel = (type) => {
+    switch(type) {
+      case '1':
+        return 'Vin rouge';
+      case '2':
+        return 'Vin blanc';
+      case '3':
+        return 'Vin rosé';
+      default:
+        return '';
+    }
+  };
+  
+
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
       <p className="text-2xl text-slate-700">Liste des vins</p>
@@ -204,6 +218,9 @@ export default function Vin() {
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
               NOM<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
+            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
+              TYPE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            </th>
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('prix')}>
               PRIX (€)<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
@@ -224,6 +241,7 @@ export default function Vin() {
               <td className="border-t border-slate-100 px-4 py-4"> <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>       
               <td className="border-t border-slate-100 px-4 py-4">{vin.num_vin}</td>
               <td className="border-t border-slate-100 px-4 py-4">{vin.nom}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{getTypeLabel(vin.type)}</td>
               <td className="border-t border-slate-100 px-4 py-4">{vin.prix}</td>
               <td className={`border-t border-slate-100 px-4 py-4`}>{vin.quantite}</td>
               <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900 hover:text-slate-900">

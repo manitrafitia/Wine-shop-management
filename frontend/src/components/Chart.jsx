@@ -55,6 +55,7 @@ export default function SalesChart() {
       plotOptions: {
         bar: {
           columnWidth: "50%",
+          opacity: "100%",
           borderRadius: 2,
         },
       },

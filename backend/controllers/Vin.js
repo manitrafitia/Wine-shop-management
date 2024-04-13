@@ -19,14 +19,20 @@ async function generateNextVinId() {
 
 exports.create = async (req, res) => {
     try {
-        if (!req.body.nom || !req.body.cepages || !req.body.appellation || !req.body.teneur_alcool || !req.body.description || !req.body.prix ) {
+        // Vérifier si toutes les données requises sont présentes dans la requête
+        const requiredFields = ['nom', 'cepages', 'appellation', 'teneur_alcool', 'description', 'prix', 'type'];
+        const missingFields = requiredFields.filter(field => !req.body[field]);
+
+        if (missingFields.length > 0) {
             return res.status(400).send({
-                message: "Data cannot be empty!"
+                message: `Missing required fields: ${missingFields.join(', ')}`
             });
         }
 
+        // Générer le numéro de vin
         const num_vin = await generateNextVinId();
 
+        // Créer un nouveau vin avec les données fournies dans la requête
         const vin = new Vin({
             num_vin: num_vin,
             nom: req.body.nom,
@@ -36,11 +42,15 @@ exports.create = async (req, res) => {
             description: req.body.description,
             prix: req.body.prix,
             photo: req.body.photo,
-            quantite: 0 // Initialiser la quantité à 0
+            type: req.body.type,
+            quantite: 0
         });
 
+        // Enregistrer le vin dans la base de données
         const savedVin = await vin.save();
-        res.send({
+
+        // Envoyer une réponse avec le vin créé
+        res.status(201).send({
             message: "Vin created successfully!",
             vin: savedVin
         });
@@ -51,6 +61,7 @@ exports.create = async (req, res) => {
         });
     }
 };
+
 
 // Les autres méthodes CRUD (findAll, findOne, update, delete) restent inchangées
 

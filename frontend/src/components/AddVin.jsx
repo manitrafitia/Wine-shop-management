@@ -23,7 +23,8 @@ export default function AddVin({ onClose, updateData }) {
     description: '',
     prix: '',
     photo: '',
-    quantite: ''
+    quantite: '',
+    type: ''
   });
   const [selectedFileName, setSelectedFileName] = useState('');
 
@@ -50,8 +51,11 @@ export default function AddVin({ onClose, updateData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Supprimer le champ vide de la photo s'il existe
+      const { photo, ...cleanedData } = vinData;
+
       const dataToSend = {
-        ...vinData,
+        ...cleanedData,
         photo: selectedFileName
       };
     
@@ -65,7 +69,8 @@ export default function AddVin({ onClose, updateData }) {
         description: '',
         prix: '',
         photo: '',
-        quantite: ''
+        quantite: '',
+        type: ''
       });
 
       // Mise à jour des données dans Vin.jsx après avoir ajouté un vin avec succès
@@ -73,7 +78,7 @@ export default function AddVin({ onClose, updateData }) {
       showSuccessMessage();
       onClose(); 
     } catch (error) {
-      console.error('Error adding vin:', error);
+      console.error('Erreur lors de l\'ajout du vin :', error);
     }
   };
 
@@ -99,7 +104,7 @@ export default function AddVin({ onClose, updateData }) {
             <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Ajouter un vin</h2>
             <FontAwesomeIcon className='mt-2  mx-2 hover:text-slate-400' onClick={onClose} icon={faTimes} />
           </div>
-          <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-5'>
+          <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-4'>
               <div>
               <div className="flex items-center space-x-6">
           <div className="shrink-0">
@@ -107,7 +112,7 @@ export default function AddVin({ onClose, updateData }) {
               id='preview_img'
               className="h-16 w-16 object-cover rounded-full"
               src="https://media.istockphoto.com/id/527820617/vector/photographs-pictures-icon-on-white-background.jpg?s=612x612&w=0&k=20&c=KeE_j06DJgO7Dkx4l6gqPN6iEKQyWxOuzXjnMY5ul_A="
-              alt="Current profile photo"
+              alt="Photo de profil actuelle"
             />
           </div>
           <label className="block">
@@ -122,7 +127,7 @@ export default function AddVin({ onClose, updateData }) {
     />
     <div className=' bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full'>
    <p className="p-2">
-   Choisir un image
+   Choisir une image
     </p>
     </div>
   </label>
@@ -141,7 +146,20 @@ export default function AddVin({ onClose, updateData }) {
               className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
              
             />
-              
+             <label htmlFor="" className='mb-4'>Type :</label>
+             <select
+  name='type'
+  value={vinData.type}
+  onChange={handleChange}
+  className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+  required
+>
+  <option value="">Sélectionnez un vin</option>
+  <option value="1">Vin rouge</option>
+  <option value="2">Vin blanc</option>
+  <option value="3">Vin rosé</option>
+</select>
+
        <div className="flex">
           <div>
               <label htmlFor="" className='mb-4'>Cépage </label>
@@ -179,7 +197,7 @@ export default function AddVin({ onClose, updateData }) {
           </div>
        </div>
         <div>
-        <label htmlFor="" className='mb-4'>Déscription  </label>
+        <label htmlFor="" className='mb-4'>Description  </label>
             <textarea
               name='description'
               value={vinData.description}

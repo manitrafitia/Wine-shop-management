@@ -54,7 +54,7 @@ export default function Cards() {
           </div>
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-slate-900">
+          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-wine-700 to-slate-900 shadow-xl">
             <FontAwesomeIcon className='p-3' icon={faCoins} />
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function Cards() {
         <p className="text-xl   font-bold ">{nombreBouteillesVendues !== null ? nombreBouteillesVendues : 'Chargement en cours...'}</p>
         </div>
       </div>
-      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-wine-700">
+      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-wine-700 to-slate-900 shadow-xl">
         <FontAwesomeIcon className='p-3' icon={faWineBottle} />
       </div>
     </div>
@@ -81,7 +81,7 @@ export default function Cards() {
         
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-slate-900 rounded-xl text-white">
+          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-wine-700 to-slate-900 rounded-xl text-white shadow-xl">
             <FontAwesomeIcon className='p-3' icon={faWineGlass} />
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function Cards() {
           </div>     
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-wine-700 rounded-xl text-white">
+          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-wine-700 to-slate-900 rounded-xl text-white shadow-xl">
             <FontAwesomeIcon className='p-3' icon={faUserGroup} />
           </div>
         </div>

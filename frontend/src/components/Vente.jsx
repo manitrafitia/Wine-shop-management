@@ -5,6 +5,20 @@ import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, f
 import useTableFunctions from './TableFunctions';
 import AddVente from './AddVente';
 
+// Fonction pour formater la date en "DD MMMM YYYY"
+const formatDate = (dateString) => {
+  // Créez un objet Date à partir de la chaîne de caractères de la date
+  const date = new Date(dateString);
+
+  // Options de formatage pour afficher le jour en chiffre, le mois en long et l'année en chiffre
+  const options = { day: '2-digit', month: 'long', year: 'numeric' };
+
+  // Utilisez l'objet Intl.DateTimeFormat pour formater la date
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
+
+  return formattedDate;
+};
+
 export default function Vente() {
   const [sortType, setSortType] = useState('asc');
   const [sortColumn, setSortColumn] = useState('');
@@ -12,7 +26,20 @@ export default function Vente() {
   const [currentPage, setCurrentPage] = useState(1);
   const [checkedItems, setCheckedItems] = useState([]);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
-
+  const [vinList, setVinList] = useState([]);
+  useEffect(() => {
+    const fetchVins = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/vin');
+        setVinList(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données des vins :', error);
+      }
+    };
+  
+    fetchVins();
+  }, []);
+  
   const {
     data,
     setData,
@@ -103,8 +130,11 @@ export default function Vente() {
   }).map((vente, index) => (
     <tr key={index} className=' text-slate-900 text-sm'>
       <td className="border-t border-gray-200 px-4 py-4">{vente.num_vente}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{vinList.find(vin => vin._id === vente.vin)?.nom}</td>
+
       <td className="border-t border-gray-200 px-4 py-4">{vente.quantite_vendue}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{vente.date}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{formatDate(vente.date)}</td>
+
       <td className="border-t border-gray-200 px-4 py-4">{vente.mode_paiement}</td>
       <td className="border-t border-gray-200 px-4 py-4">{vente.montant_total}</td>
     </tr>
@@ -135,6 +165,9 @@ export default function Vente() {
        
             <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
               #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            </th>
+            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
+              VIN<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4 font-semibold" onClick={() => handleSort('quantite_vendue')}>
               QUANTITE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'quantite_vendue' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />

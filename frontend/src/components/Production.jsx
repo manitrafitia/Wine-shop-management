@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH, faPencil, faDownload, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from './TableFunctions';
 import AddProduction from './AddProduction'; 
 import EditProduction from './EditProduction';
 import ConfirmDelete from './ConfirmDelete'; 
 import Success from './Success'
+// Fonction pour formater la date en "DD MMMM YYYY"
+const formatDate = (dateString) => {
+  // Créez un objet Date à partir de la chaîne de caractères de la date
+  const date = new Date(dateString);
+
+  // Options de formatage pour afficher le jour en chiffre, le mois en long et l'année en chiffre
+  const options = { day: '2-digit', month: 'long', year: 'numeric' };
+
+  // Utilisez l'objet Intl.DateTimeFormat pour formater la date
+  const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
+
+  return formattedDate;
+};
 
 export default function Production() {
   const [searchValue, setSearchValue] = useState(''); // 1. Ajoutez un état pour stocker la valeur de recherche.
@@ -45,22 +58,40 @@ export default function Production() {
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
 
+  const [vinList, setWineList] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/production');
-        setData(response.data);
-        setCheckedItems(new Array(response.data.length).fill(false));
+        // Récupérer la liste complète des vins
+        const vinResponse = await axios.get('http://localhost:3000/vin');
+        const vins = vinResponse.data;
+        console.log('Vins:', vins);
+  
+        // Récupérer les données de production
+        const productionResponse = await axios.get('http://localhost:3000/production');
+        const productions = productionResponse.data.map(production => {
+          // Trouver le nom du vin correspondant à partir de l'ID du vin
+          const vin = vins.find(vin => vin._id === production.vin); // Modifier 'id' en '_id'
+          return {
+            ...production,
+            nom_vin: vin ? vin.nom : '' // Si le vin correspondant est trouvé, utiliser son nom, sinon une chaîne vide
+          };
+        });
+        console.log('Productions:', productions);
+        setData(productions);
+        setCheckedItems(new Array(productions.length).fill(false));
         setIsCheckedAll(false);
-        const totalPagesCount = Math.ceil(response.data.length / itemsPerPage);
+        const totalPagesCount = Math.ceil(productions.length / itemsPerPage);
         setTotalPages(totalPagesCount);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
     };
-
+  
     fetchData();
   }, [setData]);
+  
 
   const handleUpdateData = async () => {
     try {
@@ -204,9 +235,10 @@ export default function Production() {
               </td> */}
               <td className="border-t border-slate-100 px-4 py-4">{item.num_prod}</td>
              
-              <td className="border-t border-slate-100 px-4 py-4">{item.vin}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{item.nom_vin}</td>
+
               <td className="border-t border-slate-100 px-4 py-4">{item.quantite}</td>
-              <td className="border-t border-slate-100 px-4 py-4">{item.date_prod}</td>
+              <td className="border-t border-slate-100 px-4 py-4">{formatDate(item.date_prod)}</td>
               <td className="border-t border-slate-100 px-4 py-4">{item.region}</td>
               <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
                 <button onClick={() => handleEditProduction(item.num_prod)}>
@@ -216,6 +248,10 @@ export default function Production() {
               <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
               <button onClick={() => handleOpenConfirmDeleteDialog(item)}>Supprimer</button>
 
+</td>
+<td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+
+<button><FontAwesomeIcon className="w-10" icon={faDownload} /></button>
 </td>
     
             </tr>

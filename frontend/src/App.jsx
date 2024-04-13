@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import Production from './components/Production';
 import Client from './components/Client';
 import Vente from './components/Vente';
+import GraphMain from './components/GraphMain'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -60,10 +61,11 @@ function App() {
             />
           </button>
           <br />
-          <button onClick={() => handleSidebarItemClick('')}>
+          <button onClick={() => handleSidebarItemClick('GraphMain')}>
             <SidebarItem
               icon={faChartBar}
               text="Graphiques"
+              active={currentPage === 'GraphMain'}
             />
           </button>
         </Sidebar>
@@ -74,6 +76,7 @@ function App() {
           {currentPage === 'Production' && <Production />}
           {currentPage === 'Client' && <Client />}
           {currentPage === 'Vente' && <Vente />}
+          {currentPage === 'GraphMain' && <GraphMain />}
         </div>
         
       </div>

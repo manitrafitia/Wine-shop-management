@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const vinSchema = new mongoose.Schema({
     num_vin: { type: String, required: true, unique: true }, 
     nom: { type: String, required: true },
+    type: { type: String, required: true },
     cepages: { type: String, required: true },
     appellation: { type: String, required: true },
     teneur_alcool: { type: Number, required: true },
