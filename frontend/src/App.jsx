@@ -8,7 +8,7 @@ import Dashboard from './components/Dashboard';
 import Production from './components/Production';
 import Client from './components/Client';
 import Vente from './components/Vente';
-import GraphMain from './components/GraphMain'
+import Rech from './components/Rech'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -28,6 +28,15 @@ function App() {
               active={currentPage === 'Dashboard'}
             />
           </button>
+          <div className="border border-t border-slate-600 mt-2"></div>
+          <button onClick={() => handleSidebarItemClick('Rech')}>
+            <SidebarItem
+              icon={faChartBar}
+              text="Recherche"
+              active={currentPage === 'Rech'}
+            />
+
+          </button>
           <br />
           <button onClick={() => handleSidebarItemClick('Vin')}>
             <SidebarItem
@@ -45,6 +54,7 @@ function App() {
             />
           </button>
           <br />
+          <div className="border border-t border-slate-600 mt-2"></div>
           <button onClick={() => handleSidebarItemClick('Client')}>
             <SidebarItem
               icon={faUserGroup}
@@ -61,13 +71,7 @@ function App() {
             />
           </button>
           <br />
-          <button onClick={() => handleSidebarItemClick('GraphMain')}>
-            <SidebarItem
-              icon={faChartBar}
-              text="Graphiques"
-              active={currentPage === 'GraphMain'}
-            />
-          </button>
+
         </Sidebar>
         <div className="flex-1 bg-slate-100">
           <Header />
@@ -76,11 +80,11 @@ function App() {
           {currentPage === 'Production' && <Production />}
           {currentPage === 'Client' && <Client />}
           {currentPage === 'Vente' && <Vente />}
-          {currentPage === 'GraphMain' && <GraphMain />}
+          {currentPage === 'Rech' && <Rech />}
         </div>
         
       </div>
-     
+
     </>
   );
 }

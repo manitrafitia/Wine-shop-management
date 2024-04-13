@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productionController = require('../controllers/Production');
 
+router.get('/month', productionController.getProductionByMonth);
 router.post('/', productionController.create);
 router.get('/', productionController.findAll);
 router.get('/total', productionController.getTotalWineProduced);

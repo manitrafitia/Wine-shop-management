@@ -110,3 +110,21 @@ exports.delete = async (req, res) => {
         res.status(500).json({ message: "Error deleting vin with number " + req.params.num_vin });
     }
 };
+
+exports.countByType = async (req, res) => {
+    try {
+        const sumQuantiteByVin = await Vin.aggregate([
+            {
+                $group: {
+                    _id: "$type",
+                    totalQuantite: { $sum: "$quantite" }
+                }
+            }
+        ]);
+
+        res.status(200).json(sumQuantiteByVin);
+    } catch (error) {
+        console.error("Error summing quantite by vin:", error);
+        res.status(500).json({ message: "Error summing quantite by vin" });
+    }
+};

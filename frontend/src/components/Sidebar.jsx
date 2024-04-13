@@ -24,7 +24,7 @@ export default function Sidebar({ children }) {
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 mt-5  px-3">{children}</ul>
+          <ul className="flex-1 mt-5 text-white px-3">{children}</ul>
         </SidebarContext.Provider>
 
         <div className="border-t flex p-3">
@@ -57,13 +57,13 @@ export function SidebarItem({ icon, text, active, alert }) {
   return (
     <li
       className={`
-        relative flex items-center p-2 my-1 
+        relative flex items-center p-4 my-1 
         font-medium rounded-lg cursor-pointer ml-2
-        transition-colors group text-gray-200 mr-0 text-slate-100
+        transition-colors group mr-0 text-slate-300
         ${
           active
-            ? "shadow-md bg-wine-700 text-white"
-            : "hover:bg-slate-800 text-slate-600"
+            ? "shadow-md bg-slate-800 text-white"
+            : "hover:bg-slate-800"
         }
     `}
     >

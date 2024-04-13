@@ -113,3 +113,30 @@ exports.getTotalWineProduced = async (req, res) => {
         res.status(500).json({ message: "Erreur lors du calcul du total de vin produit." });
     }
 };
+// Calculer le nombre de productions par mois
+exports.getProductionByMonth = async (req, res) => {
+    try {
+        const productionByMonth = await Production.aggregate([
+            {
+                $group: {
+                    _id: {
+                        month: { $month: "$date_prod" },
+                        year: { $year: "$date_prod" }
+                    },
+                    totalQuantite: { $sum: "$quantite" }
+                }
+            },
+            {
+                $sort: { "_id.month": 1 } // Tri par mois
+            }
+        ]);
+
+        if (productionByMonth.length === 0) {
+            return res.status(404).json({ message: "Aucune production trouvée." });
+        }
+
+        res.status(200).json(productionByMonth);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors du calcul du nombre de productions par mois." });
+    }
+};

@@ -49,7 +49,7 @@ export default function Cards() {
       <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
         <div className="flex justify-between w-full">
           <div>
-          <p className="    font-semibold text-slate-500">Chiffres d'affaires</p>
+          <p className="    font-semibold text-slate-500">Chiffre d'affaires</p>
           <p className="text-xl   font-bold">{chiffreAffaires ? `${chiffreAffaires} €` : 'Chargement en cours...'}</p>
           </div>
         </div>
