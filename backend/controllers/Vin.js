@@ -128,3 +128,27 @@ exports.countByType = async (req, res) => {
         res.status(500).json({ message: "Error summing quantite by vin" });
     }
 };
+
+// Rechercher des vins en fonction du type, de l'intervalle de prix et de l'intervalle de teneur en alcool
+exports.search = async (req, res) => {
+    try {
+        const { type, prixMin, prixMax, teneurAlcoolMin, teneurAlcoolMax } = req.body;
+
+        // Construire le filtre de recherche en fonction des valeurs reçues
+        const filter = { type };
+        if (prixMin !== undefined && prixMax !== undefined) {
+            filter.prix = { $gte: prixMin, $lte: prixMax };
+        }
+        if (teneurAlcoolMin !== undefined && teneurAlcoolMax !== undefined) {
+            filter.teneur_alcool = { $gte: teneurAlcoolMin, $lte: teneurAlcoolMax };
+        }
+
+        // Exécuter la requête de recherche en utilisant le filtre
+        const vins = await Vin.find(filter);
+
+        res.status(200).json(vins);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Une erreur s'est produite lors de la recherche de vins." });
+    }
+};

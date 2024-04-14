@@ -2,6 +2,7 @@ const express = require('express');
 const VinController = require('../controllers/Vin');
 const router = express.Router();
 
+router.post('/search', VinController.search);
 router.get('/type', VinController.countByType);
 router.post('/', VinController.create);
 router.get('/', VinController.findAll);
