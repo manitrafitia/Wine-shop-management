@@ -100,11 +100,11 @@ export default function AddVin({ onClose, updateData }) {
       {showSuccess && <Success />}
       <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
         <div ref={dialogRef} className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10'>
-          <div className="flex p-3 mb-4 bg-slate-100 pb-4 rounded-t-xl ">
-            <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Ajouter un vin</h2>
-            <FontAwesomeIcon className='mt-2  mx-2 hover:text-slate-400' onClick={onClose} icon={faTimes} />
+          <div className="flex p-3 mb-4 bg-charade-100 pb-4 rounded-t-xl ">
+            <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-charade-600'>Ajouter un vin</h2>
+            <FontAwesomeIcon className='mt-2  mx-2 hover:text-charade-400' onClick={onClose} icon={faTimes} />
           </div>
-          <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-4'>
+          <form onSubmit={handleSubmit} className='text-black text-sm font-semibold mx-2  p-4'>
               <div>
               <div className="flex items-center space-x-6">
           <div className="shrink-0">
@@ -125,7 +125,7 @@ export default function AddVin({ onClose, updateData }) {
       className="hidden"
       required
     />
-    <div className=' bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full'>
+    <div className=' bg-charade-100 hover:bg-charade-200 text-charade-500 rounded-full'>
    <p className="p-2">
    Choisir une image
     </p>
@@ -143,7 +143,7 @@ export default function AddVin({ onClose, updateData }) {
               name='nom'
               value={vinData.nom}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
              
             />
              <label htmlFor="" className='mb-4'>Type :</label>
@@ -151,7 +151,7 @@ export default function AddVin({ onClose, updateData }) {
   name='type'
   value={vinData.type}
   onChange={handleChange}
-  className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+  className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
   required
 >
   <option value="">Sélectionnez un vin</option>
@@ -168,7 +168,7 @@ export default function AddVin({ onClose, updateData }) {
               name='cepages'
               value={vinData.cepages}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
           </div>
@@ -179,7 +179,7 @@ export default function AddVin({ onClose, updateData }) {
               name='appellation'
               value={vinData.appellation}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
           </div>
@@ -191,7 +191,7 @@ export default function AddVin({ onClose, updateData }) {
         name='teneur_alcool'
         value={vinData.teneur_alcool}
         onChange={handleChange}
-        className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+        className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
         required
       />
           </div>
@@ -202,7 +202,7 @@ export default function AddVin({ onClose, updateData }) {
               name='description'
               value={vinData.description}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
         </div>
@@ -213,7 +213,7 @@ export default function AddVin({ onClose, updateData }) {
               name='prix'
               value={vinData.prix}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
 
@@ -228,7 +228,7 @@ export default function AddVin({ onClose, updateData }) {
               </button>
               <button
                 type='submit'
-                className='w-1/2 bg-slate-500 text-white ml-2 py-2 rounded hover:bg-slate-600'
+                className='w-1/2 bg-charade-500 text-white ml-2 py-2 rounded hover:bg-charade-600'
               >Ajouter</button>
 
             </div>

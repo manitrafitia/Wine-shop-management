@@ -5,7 +5,7 @@ const productionController = require('../controllers/Production');
 router.get('/month', productionController.getProductionByMonth);
 router.post('/', productionController.create);
 router.get('/', productionController.findAll);
-router.get('/total', productionController.getTotalWineProduced);
+router.get('/total', productionController.getTotalblushProduced);
 router.get('/:num_prod', productionController.findOne);
 router.put('/:num_prod', productionController.update);
 router.delete('/:num_prod', productionController.delete);

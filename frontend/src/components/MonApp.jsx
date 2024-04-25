@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Sidebar, { SidebarItem } from '../components/Sidebar';
-import Vin from '../components/Vin'; // Importez le composant Vin
 import { faTable, faMartiniGlass, faUserGroup, faStore, faHome, faChartBar } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
 import Dashboard from '../components/Dashboard';
@@ -8,24 +6,26 @@ import Production from '../components/Production';
 import Client from '../components/Client';
 import Vente from '../components/Vente';
 import Rech from '../components/Rech';
+import Sidebar, { SidebarItem } from '../components/Sidebar';
+import Vin from '../components/Vin';
 import ProductionReport from '../components/ProductionReport';
 
 
-function MonApp() {
+function MonApp({}) {
   const [currentPage, setCurrentPage] = useState('Dashboard');
+  const [username, setUsername] = useState('');
 
   const handleSidebarItemClick = (page) => {
     setCurrentPage(page);
   };
-  const [username, setUsername] = useState(''); // Initialiser la variable d'état pour stocker le nom d'utilisateur
 
-  // Fonction pour mettre à jour le nom d'utilisateur une fois qu'il est récupéré
   const updateUsername = (newUsername) => {
     setUsername(newUsername);
   };
+
   return (
     <>
-      <div className="flex text-slate-800">
+      <div className="flex text-charade-800  bg-charade-100">
         <Sidebar className="w-64">
           <button onClick={() => handleSidebarItemClick('Dashboard')}>
             <SidebarItem
@@ -34,7 +34,7 @@ function MonApp() {
               active={currentPage === 'Dashboard'}
             />
           </button>
-          <div className="border border-t border-slate-600 mt-2"></div>
+          <br />
           <button onClick={() => handleSidebarItemClick('Rech')}>
             <SidebarItem
               icon={faChartBar}
@@ -60,7 +60,6 @@ function MonApp() {
             />
           </button>
           <br />
-          <div className="border border-t border-slate-600 mt-2"></div>
           <button onClick={() => handleSidebarItemClick('Client')}>
             <SidebarItem
               icon={faUserGroup}
@@ -77,17 +76,10 @@ function MonApp() {
             />
           </button>
           <br />
-          <button onClick={() => handleSidebarItemClick('ProductionReport')}>
-            <SidebarItem
-              icon={faStore}
-              text="ProductionReports"
-              active={currentPage === 'ProductionReport'}
-            />
-          </button>
           <br />
 
         </Sidebar>
-        <div className="flex-1 bg-slate-100">
+        <div className="flex-1 bg-charade-100">
           <Header />
           {currentPage === 'Dashboard' && <Dashboard />}
           {currentPage === 'Vin' && <Vin />}

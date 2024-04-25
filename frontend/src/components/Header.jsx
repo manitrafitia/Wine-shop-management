@@ -8,7 +8,7 @@ export default function Header({ username }) {
     <header className="w-full">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <ul className="flex items-center">
-          <li className="relative text-slate-600">
+          <li className="relative text-charade-600">
             <input 
               type="search" 
               placeholder="Search" 

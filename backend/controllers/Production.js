@@ -91,7 +91,7 @@ exports.delete = async (req, res) => {
 };
 
 // Calculer le total de vin produit
-exports.getTotalWineProduced = async (req, res) => {
+exports.getTotalblushProduced = async (req, res) => {
     try {
         const totalProduced = await Production.aggregate([
             {
@@ -127,7 +127,7 @@ exports.getProductionByMonth = async (req, res) => {
                 }
             },
             {
-                $sort: { "_id.month": 1 } // Tri par mois
+                $sort: { "_id.month": 1 } 
             }
         ]);
 
@@ -135,8 +135,20 @@ exports.getProductionByMonth = async (req, res) => {
             return res.status(404).json({ message: "Aucune production trouvée." });
         }
 
-        res.status(200).json(productionByMonth);
+        const productionByMonthFormatted = productionByMonth.map(item => {
+            const monthNames = ["", "jan", "fév", "mar", "avr", "mai", "juin", "juil", "août", "sept", "oct", "nov", "déc"];
+            return {
+                _id: {
+                    month: monthNames[item._id.month],
+                    year: item._id.year
+                },
+                totalQuantite: item.totalQuantite
+            };
+        });
+
+        res.status(200).json(productionByMonthFormatted);
     } catch (error) {
+        console.error("Error retrieving production by month:", error);
         res.status(500).json({ message: "Erreur lors du calcul du nombre de productions par mois." });
     }
 };

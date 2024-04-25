@@ -74,11 +74,11 @@ export default function AddClient({ onClose, updateData }) {
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
       <div ref={dialogRef} className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10'>
-        <div className="flex p-3 mb-4 bg-slate-100 pb-4 rounded-t-xl ">
-          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Ajouter un client</h2>
-          <FontAwesomeIcon className='mt-2  mx-2 hover:text-slate-400' onClick={onClose} icon={faTimes} />
+        <div className="flex p-3 mb-4 bg-charade-100 pb-4 rounded-t-xl ">
+          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-charade-600'>Ajouter un client</h2>
+          <FontAwesomeIcon className='mt-2  mx-2 hover:text-charade-400' onClick={onClose} icon={faTimes} />
         </div>
-        <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-5'>
+        <form onSubmit={handleSubmit} className='text-black text-sm font-semibold mx-2  p-5'>
           <div>
             <div className="flex items-center space-x-6">
             </div>
@@ -89,7 +89,7 @@ export default function AddClient({ onClose, updateData }) {
             name='nom'
             value={clientData.nom}
             onChange={handleChange}
-            className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+            className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
           />
           <label htmlFor="" className='mb-4'>Adresse </label>
@@ -98,7 +98,7 @@ export default function AddClient({ onClose, updateData }) {
             name='adresse'
             value={clientData.adresse}
             onChange={handleChange}
-            className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+            className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
           />
           <label htmlFor="" className='mb-4'>Email </label>
@@ -107,7 +107,7 @@ export default function AddClient({ onClose, updateData }) {
             name='email'
             value={clientData.email}
             onChange={handleChange}
-            className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+            className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
           />
           <label htmlFor="" className='mb-4'>Téléphone </label>
@@ -116,7 +116,7 @@ export default function AddClient({ onClose, updateData }) {
             name='telephone'
             value={clientData.telephone}
             onChange={handleChange}
-            className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+            className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
           />
           <div className='flex justify-between mb-4'>
@@ -129,7 +129,7 @@ export default function AddClient({ onClose, updateData }) {
             </button>
             <button
               type='submit'
-              className='w-1/2 bg-slate-500 text-white ml-2 py-2 rounded hover:bg-slate-600'
+              className='w-1/2 bg-charade-500 text-white ml-2 py-2 rounded hover:bg-charade-600'
             >Ajouter</button>
           </div>
         </form>

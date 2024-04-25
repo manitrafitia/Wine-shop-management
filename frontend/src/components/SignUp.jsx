@@ -1,36 +1,37 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import SignUp from './SignUp';
+import axios from 'axios'; 
+import Login from './Login';
 
-export default function Login({ onLogin }) {
+export default function SignUp({ onSignUp }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/user/login', {
+      const response = await axios.post('http://localhost:3000/user/register', {
         username: username,
         password: password
       });
 
-      if (response.status === 200) {
-        onLogin();
+      if (response.status === 201) {
+        onSignUp(); 
+        setShowLogin(true);
       } else {
-        console.error('Erreur lors de l\'authentification');
+        console.error('Erreur lors de la création de l\'utilisateur');
       }
     } catch (error) {
-      console.error('Une erreur s\'est produite lors de l\'authentification:', error);
+      console.error('Une erreur s\'est produite lors de la création de l\'utilisateur:', error);
     }
   };
 
-  const handleSignUpClick = () => {
-    setShowSignUp(true);
+  const handleLoginClick = () => {
+    setShowLogin(true);
   };
 
-  if (showSignUp) {
-    return <SignUp />;
+  if (showLogin) {
+    return <Login />;
   }
 
   return (
@@ -41,10 +42,9 @@ export default function Login({ onLogin }) {
         <img src="logo.png" alt="" className='w-40 mb-4'/>
         <p className="text-3xl font-semibold">Vinspiration, Chaque bouteille raconte une histoire.</p>
       </div>
-
       <div  className="z-20 w-1/2">
         <div className='bg-white rounded-xl m-7 p-20 shadow-xl'>
-          <h1 className='text-charade-800 font-semibold text-xl'>Connectez-vous pour gérer les ventes et productions de Vinspiration</h1>
+          <h1 className='text-charade-800 font-semibold text-xl'>Inscrivez-vous pour gérer les ventes et productions de Vinspiration</h1>
           <form onSubmit={handleSubmit} className="flex flex-col font-semibold mt-7 text-charade-800">
             <label htmlFor="username">Nom d'utilisateur ou adresse e-mail</label>
             <input
@@ -56,14 +56,12 @@ export default function Login({ onLogin }) {
               className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               placeholder='********'
               type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-            <button type="submit" className='p-3 rounded-xl text-white bg-blush-800 hover:bg-blush-900'>Se connecter</button>
-          
+            <button type="submit" className='p-3 rounded-xl text-white bg-blush-800 hover:bg-blush-900'>S'inscrire</button>
             <div className='font-semibold text-center mt-3'>Mots de passe oublié ?</div>
             <div className="border border-t my-4"></div>
-            <button type="button" onClick={handleSignUpClick} className='p-3 rounded-xl bg-white border border-charade-200 hover:bg-charade-100'>Vous n'avez pas encore de compte ?</button>
+            <button type="button" onClick={handleLoginClick} className='p-3 rounded-xl bg-white border border-charade-200 hover:bg-charade-100'>Vous avez déjà un compte ?</button>
           </form>
-        </div>
+        </div>       
       </div>
     </div>
   );

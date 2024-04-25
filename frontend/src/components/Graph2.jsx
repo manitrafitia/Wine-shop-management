@@ -73,7 +73,7 @@ export default function Example() {
       <ul>
 
         <li className="flex">
-          <div className="w-5 h-5 rounded-full bg-wine-800 mb-2"></div>
+          <div className="w-5 h-5 rounded-full bg-blush-800 mb-2"></div>
           <div className="ml-4 mb-2">Vin rouge</div>
         </li>
         <li className="flex">
@@ -81,7 +81,7 @@ export default function Example() {
           <div className="ml-4 mb-2">Vin blanc</div>
         </li>
         <li className="flex">
-          <div className="w-5 h-5 rounded-full bg-wine-100 mb-2"></div>
+          <div className="w-5 h-5 rounded-full bg-blush-100 mb-2"></div>
           <div className="ml-4 mb-2">Vin rosé</div>
         </li>
       </ul>

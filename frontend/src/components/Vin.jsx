@@ -63,10 +63,12 @@ export default function Vin() {
     try {
       const response = await axios.get('http://localhost:3000/vin');
       setData(response.data);
+      showSuccessMessage(); // Afficher la boîte de dialogue de succès
     } catch (error) {
       console.error('Erreur lors de la mise à jour des données :', error);
     }
   };
+  
 
   // Déclarez un état pour suivre l'ID du vin sélectionné pour la modification
   const [selectedVinId, setSelectedVinId] = useState(null);
@@ -110,7 +112,7 @@ export default function Vin() {
   };
 
   const getQuantiteColor = (quantite) => {
-    return quantite < 10 ? 'text-red-500' : 'text-slate-500';
+    return quantite < 10 ? 'text-red-500' : 'text-charade-500';
   };
 
   const handleSort = (columnName) => {
@@ -189,43 +191,46 @@ export default function Vin() {
 
   return (
     <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-      <p className="text-2xl text-slate-700">Liste des vins</p>
-      <div className="flex justify-between mb-4 mt-4">
-        <div>
-          <input 
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Rechercher ..."
-            className="w-auto border border-slate-200 rounded-2xl px-4 py-2"
-          />
-        </div>
-        <div>
-          <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddVinDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
-          <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button>
-        </div>
-      </div>
-      <table className="table-auto min-w-full z-3">
-        <thead className='text-left text-slate-900 border-t border-slate-100'>
+  <p className="text-2xl text-charade-700">Liste des vins</p>
+  <div className="flex flex-col sm:flex-row justify-between mb-4 mt-4"> {/* Utilisation des classes flex pour gérer les colonnes sur les écrans larges */}
+    <div className="mb-4 sm:mb-0"> {/* Utilisation de mb-4 pour l'espacement vertical */}
+      <input 
+        type="text"
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        placeholder="Rechercher ..."
+        className="w-full sm:w-auto border border-charade-200 rounded-2xl px-4 py-2" /> {/* Utilisation de w-full sur les petits écrans et w-auto sur les grands écrans */}
+    </div>
+    <div className="flex flex-wrap"> {/* Utilisation des classes flex pour gérer les boutons sur les petits écrans */}
+      <button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVinDialog(true)}>
+        <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter
+      </button>
+      <button className="bg-charade-100 px-4 py-2 rounded-xl font-semibold hover:bg-charade-200">
+        <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer
+      </button>
+    </div>
+  </div>
+  <table className="table-auto min-w-full z-3">
+        <thead className='text-left text-charade-900 border-t border-charade-100'>
           <tr>
-            <th></th>
-            {/* <th className="px-4 py-4">
+            {/* <th></th> */}
+            <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-            </th> */}
+            </th>
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_vin')}>
-              #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
-              NOM<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              NOM<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
-              TYPE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              TYPE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('prix')}>
-              PRIX (€)<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              PRIX (€)<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('quantite')}>
-              QUANTITE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             <th className="px-4 py-4"></th>
             <th></th>
@@ -234,22 +239,22 @@ export default function Vin() {
         <tbody>
           {/* Afficher les données paginées */}
           {paginatedData.map((vin, index) => (
-            <tr key={index} className=' text-slate-900 text-sm'>
-              {/* <td className="border-t border-slate-100 px-4 py-4">
+            <tr key={index} className=' text-black text-sm font-semibold font-semibold'>
+              {/* <td className="border-t border-charade-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
               </td> */}
-              <td className="border-t border-slate-100 px-4 py-4"> <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>       
-              <td className="border-t border-slate-100 px-4 py-4">{vin.num_vin}</td>
-              <td className="border-t border-slate-100 px-4 py-4">{vin.nom}</td>
-              <td className="border-t border-slate-100 px-4 py-4">{getTypeLabel(vin.type)}</td>
-              <td className="border-t border-slate-100 px-4 py-4">{vin.prix}</td>
-              <td className={`border-t border-slate-100 px-4 py-4`}>{vin.quantite}</td>
-              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900 hover:text-slate-900">
+              <td className="border-t border-charade-100 px-4 py-4"> <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>       
+              <td className="border-t border-charade-100 px-4 py-4">{vin.num_vin}</td>
+              <td className="border-t border-charade-100 px-4 py-4">{vin.nom}</td>
+              <td className="border-t border-charade-100 px-4 py-4">{getTypeLabel(vin.type)}</td>
+              <td className="border-t border-charade-100 px-4 py-4">{vin.prix}</td>
+              <td className={`border-t border-charade-100 px-4 py-4`}>{vin.quantite}</td>
+              <td className="border-t border-charade-100  px-4 py-4 text-charade-500 hover:text-charade-900 hover:text-charade-900">
                 <button onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
                   Modifier
                 </button>
               </td>
-              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+              <td className="border-t border-charade-100  px-4 py-4 text-charade-500 hover:text-charade-900">
               <button onClick={() => handleOpenConfirmDeleteDialog(vin)}>
   Supprimer
 </button>
@@ -264,17 +269,17 @@ export default function Vin() {
       {/* Pagination */}
       <div className="flex justify-between mt-4">
         <div>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </button>
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Préc</button>
+          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Préc</button>
         </div>
         <div>
           <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
         </div>
         <div>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Suiv</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Suiv</button>
+          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </button>
         </div>

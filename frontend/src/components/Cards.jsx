@@ -49,12 +49,12 @@ export default function Cards() {
       <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
         <div className="flex justify-between w-full">
           <div>
-          <p className="    font-semibold text-slate-500">Chiffre d'affaires</p>
+          <p className="    font-semibold text-charade-500">Chiffre d'affaires</p>
           <p className="text-xl   font-bold">{chiffreAffaires ? `${chiffreAffaires} €` : 'Chargement en cours...'}</p>
           </div>
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-wine-700 to-slate-900 shadow-xl">
+          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-blush-700 to-charade-900 shadow-xl">
             <FontAwesomeIcon className='p-3' icon={faCoins} />
           </div>
         </div>
@@ -62,12 +62,12 @@ export default function Cards() {
       <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
       <div className="flex justify-between w-full">
       <div>
-        <p className="    font-semibold text-slate-500">Vins vendus</p>
+        <p className="    font-semibold text-charade-500">Vins vendus</p>
         <div>
         <p className="text-xl   font-bold ">{nombreBouteillesVendues !== null ? nombreBouteillesVendues : 'Chargement en cours...'}</p>
         </div>
       </div>
-      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-wine-700 to-slate-900 shadow-xl">
+      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-blush-700 to-charade-900 shadow-xl">
         <FontAwesomeIcon className='p-3' icon={faWineBottle} />
       </div>
     </div>
@@ -75,13 +75,13 @@ export default function Cards() {
       <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
         <div  className="flex justify-between w-full">
           <div>
-          <p className="    font-semibold text-slate-500">Vins produits</p>
+          <p className="    font-semibold text-charade-500">Vins produits</p>
           <p className="text-xl font-bold">{totalQuantiteProduite !== null ? totalQuantiteProduite : 'Chargement en cours...'}</p>
           </div>
         
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-wine-700 to-slate-900 rounded-xl text-white shadow-xl">
+          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-blush-700 to-charade-900 rounded-xl text-white shadow-xl">
             <FontAwesomeIcon className='p-3' icon={faWineGlass} />
           </div>
         </div>
@@ -89,13 +89,13 @@ export default function Cards() {
       <div className="rounded-2xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
         <div  className="flex justify-between w-full">
           <div>
-          <p className="    font-semibold text-slate-500">Clients
+          <p className="    font-semibold text-charade-500">Clients
            inscrits</p>
            <p className="text-xl font-bold">{totalClients !== null ? totalClients : 'Chargement en cours...'}</p>
           </div>     
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-wine-700 to-slate-900 rounded-xl text-white shadow-xl">
+          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-blush-700 to-charade-900 rounded-xl text-white shadow-xl">
             <FontAwesomeIcon className='p-3' icon={faUserGroup} />
           </div>
         </div>

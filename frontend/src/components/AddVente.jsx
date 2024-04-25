@@ -79,17 +79,17 @@ export default function AddVente({ onClose, updateData }) {
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
       <div ref={dialogRef} className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10'>
-        <div className="flex p-3 mb-4 bg-slate-100 pb-4 rounded-t-xl ">
-          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-slate-600'>Ajouter une vente</h2>
-          <FontAwesomeIcon className='mt-2  mx-2 hover:text-slate-400' onClick={onClose} icon={faTimes} />
+        <div className="flex p-3 mb-4 bg-charade-100 pb-4 rounded-t-xl ">
+          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-charade-600'>Ajouter une vente</h2>
+          <FontAwesomeIcon className='mt-2  mx-2 hover:text-charade-400' onClick={onClose} icon={faTimes} />
         </div>
-        <form onSubmit={handleSubmit} className='text-slate-900 text-sm mx-2  p-5'>
+        <form onSubmit={handleSubmit} className='text-black text-sm font-semibold mx-2  p-5'>
           <label htmlFor="" className='mb-4'>Vin </label>
           <select
             name='num_vin'
             value={productionData.num_vin}
             onChange={handleChange}
-            className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+            className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
           >
             <option value="">Sélectionnez un vin</option>
@@ -105,7 +105,7 @@ export default function AddVente({ onClose, updateData }) {
                 name='quantite_vendue'
                 value={productionData.quantite_vendue}
                 onChange={handleChange}
-                className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+                className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
                 required
               />
             </div>
@@ -116,7 +116,7 @@ export default function AddVente({ onClose, updateData }) {
                 name='date'
                 value={productionData.date}
                 onChange={handleChange}
-                className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+                className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
                 required
               />
             </div>
@@ -127,7 +127,7 @@ export default function AddVente({ onClose, updateData }) {
               name='mode_paiement'
               value={productionData.mode_paiement}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
           </div>
@@ -137,7 +137,7 @@ export default function AddVente({ onClose, updateData }) {
               name='num_client'
               value={productionData.num_client}
               onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-slate-200 rounded-lg'
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
           </div>

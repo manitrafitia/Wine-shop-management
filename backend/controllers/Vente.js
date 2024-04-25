@@ -143,13 +143,13 @@ exports.getSalesByMonth = async (req, res) => {
                 $project: {
                     month: { $month: '$date' },
                     year: { $year: '$date' },
-                    quantite_vendue: 1 // Inclure la quantité vendue dans les résultats
+                    quantite_vendue: 1 
                 }
             },
             {
                 $group: {
                     _id: { month: '$month', year: '$year' },
-                    totalQuantite: { $sum: '$quantite_vendue' } // Utiliser la quantité vendue pour calculer le total par mois
+                    totalQuantite: { $sum: '$quantite_vendue' } 
                 }
             },
             {

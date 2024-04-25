@@ -29,7 +29,7 @@ export default function List() {
 
         <ul>
           {vins.map((vin, index) => (
-            <li key={index} className="p-4 text-slate-500 border-b flex items-center">
+            <li key={index} className="p-4 text-charade-500 border-b flex items-center">
               <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" />
               
               <p className="ml-2">{vin.nom}</p>
