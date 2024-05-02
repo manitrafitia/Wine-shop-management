@@ -91,7 +91,7 @@ exports.delete = async (req, res) => {
 };
 
 // Calculer le total de vin produit
-exports.getTotalblushProduced = async (req, res) => {
+exports.getTotalblueProduced = async (req, res) => {
     try {
         const totalProduced = await Production.aggregate([
             {

@@ -8,13 +8,13 @@ const useTableFunctions = () => {
   const iconRef = useRef(null);
   const dialogRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortType, setSortType] = useState('asc'); // 'asc' pour croissant, 'desc' pour décroissant
-  const [sortColumn, setSortColumn] = useState(''); // Colonne par défaut pour le tri
+  const [sortType, setSortType] = useState('asc');
+  const [sortColumn, setSortColumn] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/data');
+        const response = await axios.get('http://localhost:3000/production');
         setData(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
@@ -23,22 +23,11 @@ const useTableFunctions = () => {
 
     fetchData();
   }, []);
-  const handleDelete = async (index) => {
-    try {
-      const response = await axios.delete(`http://localhost:3000/vin/${data[index].id}`);
-      if (response.status === 200) {
-        const newData = [...data];
-        newData.splice(index, 1);
-        setData(newData);
-      }
-    } catch (error) {
-      console.error('Erreur lors de la suppression de l\'élément :', error);
-    }
-  };
+
   const handleEllipsisClick = (index, event) => {
     const iconRect = event.target.getBoundingClientRect();
     setShowDialogIndex(index);
-    setDialogPosition({ top: iconRect.bottom, left: iconRect.left - 75 }); // Ajustement de 50px vers la gauche
+    setDialogPosition({ top: iconRect.bottom, left: iconRect.left - 75 });
   };
 
   const handleCloseDialog = () => {
@@ -61,25 +50,20 @@ const useTableFunctions = () => {
 
   // Fonction pour déterminer la couleur en fonction de la quantité
   const getQuantiteColor = (quantite) => {
-    if (quantite < 10) {
-      return 'text-red-500';
-    } else {
-      return 'text-gray-500';
-    }
+    return quantite < 10 ? 'text-red-500' : 'text-gray-500';
   };
 
   const paginate = (pageNumber) => {
     const itemsPerPage = 10;
-    const startIndex = (pageNumber - 1) * itemsPerPage; // Indice de début des éléments pour la page actuelle
-    const endIndex = startIndex + itemsPerPage; // Indice de fin des éléments pour la page actuelle
-    const slicedData = sortedData.slice(startIndex, endIndex); // Extraire les éléments à afficher pour la page actuelle
-  
+    const startIndex = (pageNumber - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const slicedData = sortedData.slice(startIndex, endIndex);
+
     if (pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
-      setData(slicedData); // Mettre à jour les données à afficher avec les éléments pour la page actuelle
+      setData(slicedData);
     }
   };
-  
 
   const handleSort = (columnName) => {
     if (columnName === sortColumn) {
@@ -89,13 +73,36 @@ const useTableFunctions = () => {
       setSortType('asc');
     }
   };
-  
+
+  const handleUpdateData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/data');
+      setData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des données :', error);
+    }
+  };
+
+  const handleDelete = async (id, endpoint) => {
+    try {
+      await axios.delete(`http://localhost:3000/${endpoint}/${id}`);
+      handleUpdateData();
+      showSuccessMessage();
+    } catch (error) {
+      console.error('Erreur lors de la suppression :', error);
+    }
+  };
+
+  const showSuccessMessage = () => {
+    // Gestion de l'affichage du message de succès
+  };
+
   // Trier les données en fonction de la colonne et du type de tri
   const sortedData = data.slice().sort((a, b) => {
     const columnA = a[sortColumn];
     const columnB = b[sortColumn];
     let comparison = 0;
-  
+
     if (columnA > columnB) {
       comparison = 1;
     } else if (columnA < columnB) {
@@ -104,6 +111,11 @@ const useTableFunctions = () => {
 
     return sortType === 'desc' ? comparison * -1 : comparison;
   });
+
+  const totalPages = Math.ceil(data.length / 10);
+
+  // Calcul de la pagination
+  const paginatedData = sortedData.slice((currentPage - 1) * 10, currentPage * 10);
 
   return {
     data,
@@ -125,7 +137,10 @@ const useTableFunctions = () => {
     getQuantiteColor,
     paginate,
     sortedData,
-    totalPages: Math.ceil(data.length / 10), // Calcul du total des pages
+    totalPages,
+    handleUpdateData,
+    handleDelete,
+    paginatedData, // Ajout de la variable paginatedData
   };
 };
 

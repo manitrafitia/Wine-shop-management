@@ -99,7 +99,7 @@ export default function SalesChart() {
   };
 
   return (
-    <div className="bg-white rounded-xl p-7 shadow-lg">
+    <div className="bg-white rounded-xl p-7  ">
       <div className="flex flex-col md:flex-row md:items-center gap-4">
         <div>
           <h6 className="font-semibold text-xl mb-4">Bouteilles vendues par mois</h6>

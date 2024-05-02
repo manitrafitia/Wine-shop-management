@@ -32,7 +32,7 @@ export default function Cards() {
   // Fonction pour animer le nombre progressivement
   const animateNumber = (finalValue, setValue) => {
       let currentValue = 0;
-      const increment = Math.ceil(finalValue / 50); // Nombre d'incrément pour atteindre la valeur finale
+      const increment = Math.ceil(finalValue / 50);
 
       const interval = setInterval(() => {
           if (currentValue < finalValue) {
@@ -40,13 +40,14 @@ export default function Cards() {
               currentValue += increment;
           } else {
               setValue(finalValue);
-              clearInterval(interval); // Arrêter l'intervalle une fois que la valeur finale est atteinte
+              clearInterval(interval); 
           }
-      }, 20); // Intervalle de mise à jour (en millisecondes)
+      }, 20); 
   };
+
   return (
-    <div className="flex justify-center">
-      <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
+    <div className="flex justify-center m-4">
+      <div className="rounded-xl bg-white flex m-1 p-5   w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 dark:bg-black">
         <div className="flex justify-between w-full">
           <div>
           <p className="    font-semibold text-charade-500">Chiffre d'affaires</p>
@@ -54,12 +55,12 @@ export default function Cards() {
           </div>
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-blush-700 to-charade-900 shadow-xl">
+          <div className="ml-7 w-10 h-10 text-blue-500  rounded-full bg-blue-100 dark:text-black">
             <FontAwesomeIcon className='p-3' icon={faCoins} />
           </div>
         </div>
       </div>
-      <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
+      <div className="rounded-xl bg-white flex m-1 p-5   w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 dark:bg-black">
       <div className="flex justify-between w-full">
       <div>
         <p className="    font-semibold text-charade-500">Vins vendus</p>
@@ -67,12 +68,12 @@ export default function Cards() {
         <p className="text-xl   font-bold ">{nombreBouteillesVendues !== null ? nombreBouteillesVendues : 'Chargement en cours...'}</p>
         </div>
       </div>
-      <div className="ml-7 w-10 h-10 text-white rounded-xl bg-gradient-to-r from-blush-700 to-charade-900 shadow-xl">
+      <div className="ml-7 w-10 h-10 text-red-500 rounded-full bg-red-100 dark:text-black">
         <FontAwesomeIcon className='p-3' icon={faWineBottle} />
       </div>
     </div>
       </div>
-      <div className="rounded-xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
+      <div className="rounded-xl bg-white flex m-1 p-5   w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 dark:bg-black">
         <div  className="flex justify-between w-full">
           <div>
           <p className="    font-semibold text-charade-500">Vins produits</p>
@@ -81,12 +82,12 @@ export default function Cards() {
         
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-blush-700 to-charade-900 rounded-xl text-white shadow-xl">
+          <div className="ml-7 w-10 h-10 bg-green-100  rounded-full text-green-500  dark:text-black">
             <FontAwesomeIcon className='p-3' icon={faWineGlass} />
           </div>
         </div>
       </div>
-      <div className="rounded-2xl bg-white flex m-4 p-5 shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
+      <div className="rounded-2xl bg-white flex m-1 p-5   w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 dark:bg-black">
         <div  className="flex justify-between w-full">
           <div>
           <p className="    font-semibold text-charade-500">Clients
@@ -95,7 +96,7 @@ export default function Cards() {
           </div>     
         </div>
         <div>
-          <div className="ml-7 w-10 h-10 bg-gradient-to-r from-blush-700 to-charade-900 rounded-xl text-white shadow-xl">
+          <div className="ml-7 w-10 h-10 bg-yellow-100  rounded-full text-yellow-500 dark:text-black">
             <FontAwesomeIcon className='p-3' icon={faUserGroup} />
           </div>
         </div>

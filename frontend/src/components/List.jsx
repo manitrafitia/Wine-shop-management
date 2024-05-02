@@ -20,7 +20,7 @@ export default function List() {
 
   return (
     <>
-      <div className="p-7 rounded-2xl bg-white shadow overflow-y-auto max-h-96"> {/* Augmenter la hauteur ici */}
+      <div className="p-7 rounded-2xl bg-white overflow-y-auto max-h-108">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div>
             <p className="text-xl font-semibold ">Stock de vins</p>

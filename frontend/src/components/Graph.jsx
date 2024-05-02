@@ -104,7 +104,7 @@ export default function ProductionChart() {
   };
 
   return (
-    <div className="bg-white rounded-xl p-7 shadow-lg mb-3">
+    <div className="bg-white rounded-xl p-7   mb-3">
       <div className="flex flex-col md:flex-row md:items-center gap-4">
         <div>
           <h6 className="font-semibold text-xl mb-4">Bouteilles produites par mois</h6>

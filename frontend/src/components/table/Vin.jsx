@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
-import useTableFunctions from './TableFunctions';
-import AddVin from './AddVin'; 
-import EditVin from './EditVin';
-import ConfirmDelete from './ConfirmDelete'; 
-import Success from './Success'
+import useTableFunctions from '../TableFunctions';
+import AddVin from './Add/AddVin'; 
+import EditVin from './Edit/EditVin';
+import ConfirmDelete from '../ConfirmDelete'; 
+import Success from '../Success'
 
 
 export default function Vin() {
@@ -141,7 +141,7 @@ export default function Vin() {
 
   // Filtrer les données en fonction de la valeur de recherche
   const filteredData = sortedData.filter((vin) =>
-    vin.nom.toLowerCase().includes(searchValue.toLowerCase())
+  vin && vin.nom && vin.nom.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   // Calculer l'index de début et de fin des éléments à afficher pour la page actuelle
@@ -190,8 +190,11 @@ export default function Vin() {
   
 
   return (
-    <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-  <p className="text-2xl text-charade-700">Liste des vins</p>
+    <div>
+      <div  className='overflow-x-auto m-4 bg-white rounded-2xl p-4'>
+      <span className='text-slate-400 text-sm'>Dashboard \ </span>
+          <span className='text-sm font-bold text-slate-400'>Productions </span>
+      <p className="text-2xl text-charade-700 pt-2">Liste des vins</p>
   <div className="flex flex-col sm:flex-row justify-between mb-4 mt-4"> {/* Utilisation des classes flex pour gérer les colonnes sur les écrans larges */}
     <div className="mb-4 sm:mb-0"> {/* Utilisation de mb-4 pour l'espacement vertical */}
       <input 
@@ -205,18 +208,20 @@ export default function Vin() {
       <button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVinDialog(true)}>
         <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter
       </button>
-      <button className="bg-charade-100 px-4 py-2 rounded-xl font-semibold hover:bg-charade-200">
+      {/* <button className="bg-charade-100 px-4 py-2 rounded-xl font-semibold hover:bg-charade-200">
         <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer
-      </button>
+      </button> */}
     </div>
   </div>
-  <table className="table-auto min-w-full z-3">
-        <thead className='text-left text-charade-900 border-t border-charade-100'>
+      </div>
+      <div  className='overflow-x-auto m-4 bg-white rounded-2xl p-4'>
+      <table className="table-auto min-w-full z-3">
+        <thead className='text-left text-charade-900 border-charade-100'>
           <tr>
             {/* <th></th> */}
-            <th className="px-4 py-4">
+            {/* <th className="px-4 py-4">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-            </th>
+            </th> */}
             <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_vin')}>
               #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
@@ -239,11 +244,12 @@ export default function Vin() {
         <tbody>
           {/* Afficher les données paginées */}
           {paginatedData.map((vin, index) => (
-            <tr key={index} className=' text-black text-sm font-semibold font-semibold'>
+            <tr key={index}>
               {/* <td className="border-t border-charade-100 px-4 py-4">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
               </td> */}
-              <td className="border-t border-charade-100 px-4 py-4"> <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>       
+              {/* <td className="border-t border-charade-100 px-4 py-4">  
+               <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>        */}
               <td className="border-t border-charade-100 px-4 py-4">{vin.num_vin}</td>
               <td className="border-t border-charade-100 px-4 py-4">{vin.nom}</td>
               <td className="border-t border-charade-100 px-4 py-4">{getTypeLabel(vin.type)}</td>
@@ -295,6 +301,7 @@ export default function Vin() {
       )}
  {showConfirmDeleteDialog && <ConfirmDelete onClose={handleCloseConfirmDeleteDialog} onDelete={handleDeleteVin} />}
  {showSuccess && <Success />}
+      </div>
     </div>
   );
 }

@@ -19,8 +19,8 @@ export default function Dashboard() {
         </div>
 
         <div className="w-1/2 mx-2">
+        <List></List>
         <Graph2></Graph2>
-          <List></List>
         </div>
       </div>
     </>

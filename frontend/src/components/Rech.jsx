@@ -72,7 +72,7 @@ export default function Rech() {
   
   return (
     <>
-      <div className="rounded-xl bg-white p-7 m-8 mb-4 shadow-lg flex justify-center items-center">
+      <div className="rounded-xl bg-white p-7 m-4   flex justify-center items-center">
         <form action="" onSubmit={handleSearch}>
           <div className="flex flex-col md:flex-row gap-4">
             <div className='md:ml-2'>
@@ -159,7 +159,7 @@ export default function Rech() {
         {/* Si la liste des vins est vide et le chargement est terminé, afficher NotFound */}
         {vins.length === 0 && !loading ? <NotFound /> : (
           vins.map(vin => (
-            <div key={vin.id} className="rounded-xl bg-white p-4 m-4 shadow-lg flex">
+            <div key={vin.id} className="rounded-xl bg-white p-4 mb-2 flex">
               <div className="flex-none p-4 mr-4 rounded-xl bg-charade-100 w-52 h-52 flex justify-center items-center">
                 <img src={vin.photo} alt={vin.nom} className="h-full" />
               </div>

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import Success from './Success';
+import Success from '../../Success';
 
 export default function AddVin({ onClose, updateData }) {
   const [showSuccess, setShowSuccess] = useState(false); // État pour contrôler l'affichage du composant Success

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
-import useTableFunctions from './TableFunctions';
-import AddVente from './AddVente';
+import useTableFunctions from '../TableFunctions';
+import AddVente from './Add/AddVente';
 
 // Fonction pour formater la date en "DD MMMM YYYY"
 const formatDate = (dateString) => {
@@ -18,6 +18,7 @@ const formatDate = (dateString) => {
 
   return formattedDate;
 };
+
 
 export default function Vente() {
   const [sortType, setSortType] = useState('asc');
@@ -119,16 +120,16 @@ export default function Vente() {
     const columnA = a[sortColumn];
     const columnB = b[sortColumn];
     let comparison = 0;
-
+  
     if (columnA > columnB) {
       comparison = 1;
     } else if (columnA < columnB) {
       comparison = -1;
     }
-
+  
     return sortType === 'desc' ? comparison * -1 : comparison;
   }).map((vente, index) => (
-    <tr key={index} className=' text-black text-sm font-semibold'>
+    <tr key={index}>
       <td className="border-t border-gray-200 px-4 py-4">{vente.num_vente}</td>
       <td className="border-t border-gray-200 px-4 py-4">{vinList.find(vin => vin._id === vente.vin)?.nom}</td>
 
@@ -151,62 +152,70 @@ export default function Vente() {
   }, [checkedItems]);
 
   return (
-    <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-      <div className="flex justify-between mb-4">
-        <p className="text-2xl text-gray-700">Liste des ventes</p>
-        <div>
-        <button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVenteDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vente</button>
-        
-        </div>
-      </div>
-      <table className="table-auto min-w-full z-3">
-        <thead className='text-left text-charade-900 border-t border-charade-100'>
-          <tr>
-       
-            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
-              #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
-            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
-              VIN<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
-            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('quantite_vendue')}>
-              QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite_vendue' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
-            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('date')}>
-              DATE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'date' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
-            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('mode_paiement')}>
-              MODE DE PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
-            <th className="px-4 py-4 font-semibold" onClick={() => handleSort('montant_total')}>
-              TOTAL<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedVentes}
-        </tbody>
-      </table>
+    <div>
+      <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
+      <span className='text-slate-400 text-sm'>Dashboard \ </span>
+<span className='text-sm font-bold text-slate-400'>Ventes </span>
+<div className="flex justify-between mb-4">
+<p className="text-2xl text-gray-700">Liste des ventes</p>
+<div>
+<button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVenteDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vente</button>
 
-     {/* Pagination */}
-     <div className="flex justify-between mt-4">
-        <div>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
-            <FontAwesomeIcon icon={faAngleDoubleLeft} />
-          </button>
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Préc</button>
-        </div>
-        <div>
-          <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
-        </div>
-        <div>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Suiv</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
-            <FontAwesomeIcon icon={faAngleDoubleRight} />
-          </button>
-        </div>
+</div>
+</div>
       </div>
-      {showAddVenteDialog && <AddVente onClose={() => setShowAddVenteDialog(false)} updateData={handleUpdateData} />} 
+      <div  className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
+
+      <table className="table-auto min-w-full z-3">
+<thead className='text-left text-charade-900 border-charade-100'>
+<tr>
+
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
+    #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  </th>
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
+    VIN<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  </th>
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('quantite_vendue')}>
+    QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite_vendue' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  </th>
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('date')}>
+    DATE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'date' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  </th>
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('mode_paiement')}>
+    MODE DE PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  </th>
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('montant_total')}>
+    TOTAL<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  </th>
+</tr>
+</thead>
+<tbody>
+{sortedVentes}
+</tbody>
+</table>
+
+{/* Pagination */}
+<div className="flex justify-between mt-4">
+<div>
+<button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
+  <FontAwesomeIcon icon={faAngleDoubleLeft} />
+</button>
+<button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Préc</button>
+</div>
+<div>
+<p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
+</div>
+<div>
+<button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Suiv</button>
+<button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
+  <FontAwesomeIcon icon={faAngleDoubleRight} />
+</button>
+</div>
+</div>
+{showAddVenteDialog && <AddVente onClose={() => setShowAddVenteDialog(false)} updateData={handleUpdateData} />} 
+
+      </div>
     </div>
   );
 }
