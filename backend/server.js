@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const VinRoute = require('./routes/Vin.js');
 const ClientRoute = require('./routes/Client.js');
-const VenteRoute = require('./routes/Vente.js');
+const CommandeRoute = require('./routes/Commande.js');
 const ProductionRoute = require('./routes/Production.js');
 const EnregistrerRoute = require('./routes/Enregistrer.js');
 const UserRoute = require('./routes/Utilisateur.js');
@@ -36,7 +36,7 @@ mongoose.connect(dbConfig.url, {
 
 app.use('/vin',VinRoute)
 app.use('/client',ClientRoute)
-app.use('/vente',VenteRoute)
+app.use('/commande',CommandeRoute)
 app.use('/production', ProductionRoute);
 app.use('/enregistrer', EnregistrerRoute);
 app.use('/user', UserRoute);

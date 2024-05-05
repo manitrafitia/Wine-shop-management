@@ -48,7 +48,7 @@ export default function Login({ onLogin }) {
 
       <div  className="z-20 w-1/2">
         <div className='bg-white rounded-xl m-4 p-20'>
-          <h1 className='text-charade-800 font-semibold text-xl'>Connectez-vous pour gérer les ventes et productions de Vinspiration</h1>
+          <h1 className='text-charade-800 font-semibold text-xl'>Connectez-vous pour gérer les Commandes et productions de Vinspiration</h1>
           <form onSubmit={handleSubmit} className="flex flex-col font-semibold mt-7 text-charade-800">
           {authError && (
             <div className="bg-red-200 text-red-800 p-3 rounded-lg my-4">

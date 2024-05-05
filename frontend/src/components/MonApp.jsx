@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Dashboard from '../components/Dashboard';
 import Production from './table/Production';
 import Client from './table/Client';
-import Vente from './table/Vente';
+import Commande from './table/Commande';
 import Rech from '../components/Rech';
 import Sidebar, { SidebarItem } from '../components/Sidebar';
 import Vin from '../components/table/Vin';
@@ -33,8 +33,8 @@ function MonApp({}) {
         return <Production />;
       case 'Client':
         return <Client />;
-      case 'Vente':
-        return <Vente />;
+      case 'Commande':
+        return <Commande />;
       case 'Rech':
         return <Rech />;
       case 'ProductionReport':
@@ -88,11 +88,11 @@ function MonApp({}) {
             />
           </button>
           <br />
-          <button onClick={() => handleSidebarItemClick('Vente')}>
+          <button onClick={() => handleSidebarItemClick('Commande')}>
             <SidebarItem
               icon={faStore}
-              text="Ventes"
-              active={currentPage === 'Vente'}
+              text="Commandes"
+              active={currentPage === 'Commande'}
             />
           </button>
           <br />

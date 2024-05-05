@@ -1,25 +1,25 @@
-const Vente = require('../model/vente');
+const Commande = require('../model/commande');
 const Client = require('../model/client');
 const Vin = require('../model/vin');
 
-// Fonction pour générer un nouvel identifiant de vente
-async function generateNextVenteId() {
+// Fonction pour générer un nouvel identifiant de commande
+async function generateNextCommandeId() {
     try {
-        const lastVente = await Vente.findOne({}, {}, { sort: { 'num_vente': -1 } });
+        const lastCommande = await Commande.findOne({}, {}, { sort: { 'num_commande': -1 } });
         let nextId = 1;
-        if (lastVente) {
-            const lastId = parseInt(lastVente.num_vente.split('VNT')[1]);
+        if (lastCommande) {
+            const lastId = parseInt(lastCommande.num_commande.split('CMD')[1]);
             nextId = lastId + 1;
         }
-        const newVenteId = 'VNT' + String(nextId).padStart(4, '0');
-        return newVenteId;
+        const newCommandeId = 'CMD' + String(nextId).padStart(4, '0');
+        return newCommandeId;
     } catch (error) {
-        console.error("Error generating vente ID:", error);
+        console.error("Error generating commande ID:", error);
         throw error;
     }
 }
 
-// Créer une nouvelle vente
+// Créer une nouvelle commande
 exports.create = async (req, res) => {
     try {
         const { date, client, mode_paiement, vin, quantite_vendue } = req.body;
@@ -48,10 +48,10 @@ exports.create = async (req, res) => {
         existingVin.quantite -= quantite_vendue;
         await existingVin.save();
 
-        const num_vente = await generateNextVenteId();
+        const num_commande = await generateNextCommandeId();
 
-        const vente = new Vente({ 
-            num_vente, 
+        const commande = new Commande({ 
+            num_commande, 
             date, 
             client: existingClient._id, 
             mode_paiement, 
@@ -59,17 +59,17 @@ exports.create = async (req, res) => {
             quantite_vendue, 
             montant_total 
         });
-        const savedVente = await vente.save();
-        res.status(201).json(savedVente);
+        const savedCommande = await commande.save();
+        res.status(201).json(savedCommande);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Une erreur s'est produite lors de la création de la vente." });
+        res.status(500).json({ message: "Une erreur s'est produite lors de la création de la commande." });
     }
 };
 exports.findAll = async (req, res) => {
     try {
-        const ventes = await Vente.find();
-        res.status(200).json(ventes);
+        const commandes = await Commande.find();
+        res.status(200).json(commandes);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -77,43 +77,43 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
     try {
-        const vente = await Vente.findOne({ num_vente: req.params.num_vente });
-        if (!vente) {
-            return res.status(404).send({ message: "Vente non trouvée avec le numéro " + req.params.num_vente });
+        const commande = await Commande.findOne({ num_commande: req.params.num_commande });
+        if (!commande) {
+            return res.status(404).send({ message: "Commande non trouvée avec le numéro " + req.params.num_commande });
         }
-        res.status(200).json(vente);
+        res.status(200).json(commande);
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la récupération de la vente avec le numéro " + req.params.num_vente });
+        res.status(500).json({ message: "Erreur lors de la récupération de la commande avec le numéro " + req.params.num_commande });
     }
 };
 
 exports.update = async (req, res) => {
     try {
-        const updatedVente = await Vente.findOneAndUpdate({ num_vente: req.params.num_vente }, req.body, { new: true });
-        if (!updatedVente) {
-            return res.status(404).send({ message: "Vente non trouvée avec le numéro " + req.params.num_vente });
+        const updatedCommande = await Commande.findOneAndUpdate({ num_commande: req.params.num_commande }, req.body, { new: true });
+        if (!updatedCommande) {
+            return res.status(404).send({ message: "Commande non trouvée avec le numéro " + req.params.num_commande });
         }
-        res.status(200).json(updatedVente);
+        res.status(200).json(updatedCommande);
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la mise à jour de la vente avec le numéro " + req.params.num_vente });
+        res.status(500).json({ message: "Erreur lors de la mise à jour de la commande avec le numéro " + req.params.num_commande });
     }
 };
 
 exports.delete = async (req, res) => {
     try {
-        const deletedVente = await Vente.findOneAndDelete({ num_vente: req.params.num_vente });
-        if (!deletedVente) {
-            return res.status(404).send({ message: "Vente non trouvée avec le numéro " + req.params.num_vente });
+        const deletedCommande = await Commande.findOneAndDelete({ num_commande: req.params.num_commande });
+        if (!deletedCommande) {
+            return res.status(404).send({ message: "Commande non trouvée avec le numéro " + req.params.num_commande });
         }
-        res.status(200).json({ message: "Vente supprimée avec succès!" });
+        res.status(200).json({ message: "Commande supprimée avec succès!" });
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la suppression de la vente avec le numéro " + req.params.num_vente });
+        res.status(500).json({ message: "Erreur lors de la suppression de la commande avec le numéro " + req.params.num_commande });
     }
 };
 // Calculer le chiffre d'affaires et le nombre de bouteilles vendues
 exports.getSalesStats = async (req, res) => {
     try {
-        const totalSales = await Vente.aggregate([
+        const totalSales = await Commande.aggregate([
             {
                 $group: {
                     _id: null,
@@ -124,7 +124,7 @@ exports.getSalesStats = async (req, res) => {
         ]);
 
         if (totalSales.length === 0) {
-            return res.status(404).json({ message: "Aucune vente trouvée." });
+            return res.status(404).json({ message: "Aucune commande trouvée." });
         }
 
         res.status(200).json({
@@ -138,7 +138,7 @@ exports.getSalesStats = async (req, res) => {
 
 exports.getSalesByMonth = async (req, res) => {
     try {
-        const salesByMonth = await Vente.aggregate([
+        const salesByMonth = await Commande.aggregate([
             {
                 $project: {
                     month: { $month: '$date' },
@@ -175,6 +175,6 @@ exports.getSalesByMonth = async (req, res) => {
         res.status(200).json(salesByMonthFormatted);
     } catch (error) {
         console.error("Error retrieving sales by month:", error);
-        res.status(500).json({ message: "Erreur lors de la récupération du nombre de ventes par mois." });
+        res.status(500).json({ message: "Erreur lors de la récupération du nombre de commandes par mois." });
     }
 };

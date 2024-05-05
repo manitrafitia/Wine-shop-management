@@ -12,7 +12,7 @@ export default function Cards() {
   useEffect(() => {
       async function fetchData() {
           try {
-              const salesResponse = await axios.get('http://localhost:3000/vente/total');
+              const salesResponse = await axios.get('http://localhost:3000/Commande/total');
               animateNumber(salesResponse.data.chiffreAffaires, setChiffreAffaires);
               animateNumber(salesResponse.data.nombreBouteillesVendues, setNombreBouteillesVendues);
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-export default function AddVente({ onClose, updateData }) {
+export default function AddCommande({ onClose, updateData }) {
   const [vins, setVins] = useState([]);
   const [productionData, setProductionData] = useState({
     num_vin: '',
@@ -58,7 +58,7 @@ export default function AddVente({ onClose, updateData }) {
         quantite_vendue: parseInt(productionData.quantite_vendue)
       };
     
-      const response = await axios.post('http://localhost:3000/vente', dataToSend);
+      const response = await axios.post('http://localhost:3000/commande', dataToSend);
       console.log(response.data);
       setProductionData({
         num_vin: '',
@@ -72,7 +72,7 @@ export default function AddVente({ onClose, updateData }) {
 
       onClose(); 
     } catch (error) {
-      console.error('Error adding vente:', error);
+      console.error('Error adding commande:', error);
     }
   };
 
@@ -80,7 +80,7 @@ export default function AddVente({ onClose, updateData }) {
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
       <div ref={dialogRef} className='rounded-xl bg-white w-full max-w-md md:max-w-lg lg:max-w-xl z-10'>
         <div className="flex p-3 mb-4 bg-charade-100 pb-4 rounded-t-xl ">
-          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-charade-600'>Ajouter une vente</h2>
+          <h2 className='text-lg md:text-xl font-semibold mr-auto  mx-2 text-charade-600'>Ajouter une commande</h2>
           <FontAwesomeIcon className='mt-2  mx-2 hover:text-charade-400' onClick={onClose} icon={faTimes} />
         </div>
         <form onSubmit={handleSubmit} className='text-black text-sm font-semibold mx-2  p-5'>
@@ -110,7 +110,7 @@ export default function AddVente({ onClose, updateData }) {
               />
             </div>
             <div className='ml-2'>
-              <label htmlFor="" className='mb-4'>Date de vente </label>
+              <label htmlFor="" className='mb-4'>Date de commande </label>
               <input
                 type='date'
                 name='date'

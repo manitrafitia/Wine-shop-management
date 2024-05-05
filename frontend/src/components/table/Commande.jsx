@@ -3,7 +3,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from '../TableFunctions';
-import AddVente from './Add/AddVente';
+import AddCommande from './Add/AddCommande';
 
 // Fonction pour formater la date en "DD MMMM YYYY"
 const formatDate = (dateString) => {
@@ -20,7 +20,7 @@ const formatDate = (dateString) => {
 };
 
 
-export default function Vente() {
+export default function Commande() {
   const [sortType, setSortType] = useState('asc');
   const [sortColumn, setSortColumn] = useState('');
   const [itemsPerPage] = useState(6);
@@ -51,7 +51,7 @@ export default function Vente() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/vente');
+        const response = await axios.get('http://localhost:3000/commande');
         setData(response.data);
         setCheckedItems(new Array(response.data.length).fill(false));
         setIsCheckedAll(false);
@@ -67,14 +67,14 @@ export default function Vente() {
 
   const handleUpdateData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/vente');
+      const response = await axios.get('http://localhost:3000/commande');
       setData(response.data);
     } catch (error) {
       console.error('Erreur lors de la mise à jour des données :', error);
     }
   };
 
-  const [showAddVenteDialog, setShowAddVenteDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
+  const [showAddCommandeDialog, setShowAddCommandeDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
 
 
   const handleEllipsisClick = (index, event) => {
@@ -116,7 +116,7 @@ export default function Vente() {
   const endIndex = Math.min(startIndex + itemsPerPage, data.length);
   const paginatedData = data.slice(startIndex, endIndex);
 
-  const sortedVentes = paginatedData.sort((a, b) => {
+  const sortedCommandes = paginatedData.sort((a, b) => {
     const columnA = a[sortColumn];
     const columnB = b[sortColumn];
     let comparison = 0;
@@ -128,16 +128,16 @@ export default function Vente() {
     }
   
     return sortType === 'desc' ? comparison * -1 : comparison;
-  }).map((vente, index) => (
+  }).map((commande, index) => (
     <tr key={index}>
-      <td className="border-t border-gray-200 px-4 py-4">{vente.num_vente}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{vinList.find(vin => vin._id === vente.vin)?.nom}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{commande.num_commande}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{vinList.find(vin => vin._id === commande.vin)?.nom}</td>
 
-      <td className="border-t border-gray-200 px-4 py-4">{vente.quantite_vendue}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{formatDate(vente.date)}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{commande.quantite_vendue}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{formatDate(commande.date)}</td>
 
-      <td className="border-t border-gray-200 px-4 py-4">{vente.mode_paiement}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{vente.montant_total}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{commande.mode_paiement}</td>
+      <td className="border-t border-gray-200 px-4 py-4">{commande.montant_total}</td>
     </tr>
   ));
 
@@ -155,11 +155,11 @@ export default function Vente() {
     <div>
       <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
       <span className='text-slate-400 text-sm'>Dashboard \ </span>
-<span className='text-sm font-bold text-slate-400'>Ventes </span>
+<span className='text-sm font-bold text-slate-400'>Commandes </span>
 <div className="flex justify-between mb-4">
-<p className="text-2xl text-gray-700">Liste des ventes</p>
+<p className="text-2xl text-gray-700">Liste des commandes</p>
 <div>
-<button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVenteDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un vente</button>
+<button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddCommandeDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un commande</button>
 
 </div>
 </div>
@@ -170,11 +170,11 @@ export default function Vente() {
 <thead className='text-left text-charade-900 border-charade-100'>
 <tr>
 
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
-    #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_commande')}>
+    #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_commande' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
   </th>
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_vente')}>
-    VIN<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vente' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_commande')}>
+    VIN<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_commande' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
   </th>
   <th className="px-4 py-4 font-semibold" onClick={() => handleSort('quantite_vendue')}>
     QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite_vendue' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
@@ -191,7 +191,7 @@ export default function Vente() {
 </tr>
 </thead>
 <tbody>
-{sortedVentes}
+{sortedCommandes}
 </tbody>
 </table>
 
@@ -213,7 +213,7 @@ export default function Vente() {
 </button>
 </div>
 </div>
-{showAddVenteDialog && <AddVente onClose={() => setShowAddVenteDialog(false)} updateData={handleUpdateData} />} 
+{showAddCommandeDialog && <AddCommande onClose={() => setShowAddCommandeDialog(false)} updateData={handleUpdateData} />} 
 
       </div>
     </div>

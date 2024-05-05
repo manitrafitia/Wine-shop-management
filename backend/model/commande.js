@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const VenteSchema = new mongoose.Schema({
-  num_vente: { type: String, required: true, unique: true},
+const CommandeSchema = new mongoose.Schema({
+  num_commande: { type: String, required: true, unique: true},
   date: { type: Date, required: true },
   client: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: true },
   mode_paiement: { type: String, required: true },
@@ -10,4 +10,4 @@ const VenteSchema = new mongoose.Schema({
   montant_total: { type: Number, required: true },
 });
 
-module.exports = mongoose.model('Vente', VenteSchema);
+module.exports = mongoose.model('Commande', CommandeSchema);

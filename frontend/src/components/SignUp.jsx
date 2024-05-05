@@ -45,7 +45,7 @@ export default function SignUp({ onSignUp }) {
       </div>
       <div  className="z-20 w-1/2">
         <div className='bg-white rounded-xl m-4 p-20 '>
-          <h1 className='text-charade-800 font-semibold text-xl'>Inscrivez-vous pour gérer les ventes et productions de Vinspiration</h1>
+          <h1 className='text-charade-800 font-semibold text-xl'>Inscrivez-vous pour gérer les Commandes et productions de Vinspiration</h1>
           <form onSubmit={handleSubmit} className="flex flex-col font-semibold mt-7 text-charade-800">
             <label htmlFor="username">Nom d'utilisateur ou adresse e-mail</label>
             <input

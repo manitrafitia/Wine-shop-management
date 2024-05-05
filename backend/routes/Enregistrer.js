@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const venteController = require('../controllers/EnregistrerVente');
+const CommandeController = require('../controllers/EnregistrerVente');
 
-router.post('/', venteController.createClientVenteVendre);
+router.post('/', CommandeController.createClientCommandeVendre);
 
 module.exports = router;

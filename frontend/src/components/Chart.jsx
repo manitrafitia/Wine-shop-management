@@ -9,7 +9,7 @@ export default function SalesChart() {
   useEffect(() => {
     async function fetchSalesData() {
       try {
-        const response = await axios.get('http://localhost:3000/vente/month');
+        const response = await axios.get('http://localhost:3000/Commande/month');
         const salesByMonth = response.data;
 
         // Reformater les données pour correspondre au format requis par ApexCharts
