@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from '../TableFunctions';
 import AddCommande from './Add/AddCommande';
 
 // Fonction pour formater la date en "DD MMMM YYYY"
 const formatDate = (dateString) => {
-  // Créez un objet Date à partir de la chaîne de caractères de la date
   const date = new Date(dateString);
-
-  // Options de formatage pour afficher le jour en chiffre, le mois en long et l'année en chiffre
   const options = { day: '2-digit', month: 'long', year: 'numeric' };
-
-  // Utilisez l'objet Intl.DateTimeFormat pour formater la date
   const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
-
   return formattedDate;
 };
-
 
 export default function Commande() {
   const [sortType, setSortType] = useState('asc');
@@ -28,6 +21,12 @@ export default function Commande() {
   const [checkedItems, setCheckedItems] = useState([]);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [vinList, setVinList] = useState([]);
+  const [showAddCommandeDialog, setShowAddCommandeDialog] = useState(false);
+  const [showPaidOnly, setShowPaidOnly] = useState(false);
+  const [showUnpaidOnly, setShowUnpaidOnly] = useState(false); // Nouvel état pour afficher uniquement les commandes non payées
+  const [statusFilter, setStatusFilter] = useState(""); // État pour le filtre de statut
+  const [showInProgressOnly, setShowInProgressOnly] = useState(false); // État pour afficher uniquement les commandes en cours
+
   useEffect(() => {
     const fetchVins = async () => {
       try {
@@ -40,12 +39,10 @@ export default function Commande() {
   
     fetchVins();
   }, []);
-  
+
   const {
     data,
     setData,
-    setShowDialogIndex,
-    setDialogPosition,
   } = useTableFunctions();
 
   useEffect(() => {
@@ -55,8 +52,6 @@ export default function Commande() {
         setData(response.data);
         setCheckedItems(new Array(response.data.length).fill(false));
         setIsCheckedAll(false);
-        const totalPagesCount = Math.ceil(response.data.length / itemsPerPage);
-        setTotalPages(totalPagesCount);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
@@ -74,19 +69,6 @@ export default function Commande() {
     }
   };
 
-  const [showAddCommandeDialog, setShowAddCommandeDialog] = useState(false); // État pour afficher la boîte de dialogue Ajouter un vin
-
-
-  const handleEllipsisClick = (index, event) => {
-    const iconRect = event.target.getBoundingClientRect();
-    setShowDialogIndex(index);
-    setDialogPosition({ top: iconRect.bottom, left: iconRect.left - 75 });
-  };
-
-  const handleCloseDialog = () => {
-    setShowDialogIndex(-1);
-  };
-
   const handleSort = (columnName) => {
     if (columnName === sortColumn) {
       setSortType(sortType === 'asc' ? 'desc' : 'asc');
@@ -96,27 +78,26 @@ export default function Commande() {
     }
   };
 
-  const handleCheckItem = (index) => {
-    const newCheckedItems = [...checkedItems];
-    newCheckedItems[index] = !newCheckedItems[index];
-    setCheckedItems(newCheckedItems);
-  };
-
-  const handleCheckAll = () => {
-    const newCheckedItems = isCheckedAll ? new Array(data.length).fill(false) : new Array(data.length).fill(true);
-    setCheckedItems(newCheckedItems);
-    setIsCheckedAll(!isCheckedAll);
-  };
-
-  useEffect(() => {
-    setIsCheckedAll(checkedItems.every(item => item));
-  }, [checkedItems]);
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, data.length);
   const paginatedData = data.slice(startIndex, endIndex);
+  const filteredCommandes = showPaidOnly
+    ? paginatedData.filter(commande => commande.paiement === 2)
+    : showUnpaidOnly
+      ? paginatedData.filter(commande => commande.paiement === 1) // Filtrer les commandes non payées
+      : statusFilter
+        ? paginatedData.filter(commande => {
+            if (statusFilter === "received") {
+              return commande.statut === 2; // Filtrer les commandes avec le statut "Reçu"
+            } else {
+              return commande.statut === 1; // Filtrer les commandes avec le statut "En cours"
+            }
+          })
+        : showInProgressOnly // Filtrer les commandes en cours
+          ? paginatedData.filter(commande => commande.statut === 1)
+          : paginatedData;
 
-  const sortedCommandes = paginatedData.sort((a, b) => {
+  const sortedCommandes = filteredCommandes.sort((a, b) => {
     const columnA = a[sortColumn];
     const columnB = b[sortColumn];
     let comparison = 0;
@@ -129,91 +110,134 @@ export default function Commande() {
   
     return sortType === 'desc' ? comparison * -1 : comparison;
   }).map((commande, index) => (
-    <tr key={index}>
-      <td className="border-t border-gray-200 px-4 py-4">{commande.num_commande}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{vinList.find(vin => vin._id === commande.vin)?.nom}</td>
+    <tr key={index} >
+      <td className="border-t border-gray-200 px-2 py-2">{commande.num_commande}</td>
+      <td className="border-t border-gray-200 px-2 py-2">{vinList.find(vin => vin._id === commande.vin)?.nom}</td>
+      <td className="border-t border-gray-200 px-2 py-2">{commande.quantite_vendue}</td>
+      <td className="border-t border-gray-200 px-2 py-2">{formatDate(commande.date)}</td>
+      <td className="border-t border-gray-200 px-2 py-2">{commande.mode_paiement}</td>
+      <td className="border-t border-gray-200 px-2 py-2">
+        <div className={commande.paiement === 1 ? "bg-red-500 text-white rounded-xl w-20 text-sm text-center font-semibold" : "font-semibold text-white bg-green-500 text-sm rounded-xl w-20 text-center"}>
+          {commande.paiement === 1 ? "Non payé" : "Payé"}
+        </div>
+      </td>
+      <td className="border-t border-gray-200 px-2 py-2">
+        <div className={commande.statut === 1 ? "bg-gray-200 rounded-xl w-20 text-sm text-center font-semibold" : "font-semibold bg-orange-500 text-white text-sm rounded-xl w-20 text-center"}>
+          {commande.statut === 1 ? "En cours" : "Reçu"}
+        </div>
+      </td>
+      <td className="border-t border-gray-200 px-2 py-2">{commande.montant_total}</td>
+      <td className="border-t border-charade-100  px-2 py-2 text-charade-500 hover:text-charade-900 hover:text-charade-900">
+                <button>
+                  Modifier
+                </button>
+      </td>
+      <td className="border-t border-slate-100  px-2 py-2 text-slate-500 hover:text-slate-900">
 
-      <td className="border-t border-gray-200 px-4 py-4">{commande.quantite_vendue}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{formatDate(commande.date)}</td>
-
-      <td className="border-t border-gray-200 px-4 py-4">{commande.mode_paiement}</td>
-      <td className="border-t border-gray-200 px-4 py-4">{commande.montant_total}</td>
+<button><FontAwesomeIcon className="w-10" icon={faDownload} /></button>
+</td>
     </tr>
   ));
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredCommandes.length / itemsPerPage);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    setIsCheckedAll(checkedItems.every(item => item));
-  }, [checkedItems]);
-
   return (
     <div>
       <div className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
-      <span className='text-slate-400 text-sm'>Dashboard \ </span>
-<span className='text-sm font-bold text-slate-400'>Commandes </span>
-<div className="flex justify-between mb-4">
-<p className="text-2xl text-gray-700">Liste des commandes</p>
-<div>
-<button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddCommandeDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un commande</button>
-
-</div>
-</div>
+        <span className='text-slate-400 text-sm'>Dashboard \ </span>
+        <span className='text-sm font-bold text-slate-400'>Commandes </span>
+        <div className="flex justify-between mb-4">
+          <p className="text-2xl text-gray-700">Liste des commandes</p>
+          <div>
+            <button className="border border-charade-500 text-charade-500 font-semibold px-2 mr-2 py-1 rounded-xl hover:bg-charade-100" onClick={() => setShowAddCommandeDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter un commande</button>
+            
+          </div>
+        </div>
+        <div className='mt-4 mx-4'>
+          <button onClick={() => setShowPaidOnly(!showPaidOnly)} className="bg-gray-200 ml-2 font-semibold px-4 py-1 rounded hover:bg-gray-300">
+            {showPaidOnly ? "Payés" : "Payés"}
+          </button>
+          {/* Ajout du bouton pour afficher uniquement les commandes non payées */}
+          <button onClick={() => setShowUnpaidOnly(!showUnpaidOnly)} className="bg-gray-200 ml-2 font-semibold px-4 py-1 rounded hover:bg-gray-300">
+            {showUnpaidOnly ? "Non Payés" : "Non Payés"}
+          </button>
+          {/* Bouton pour filtrer par statut */}
+          <button
+              className="bg-gray-200 ml-2 font-semibold px-4 py-1 rounded hover:bg-gray-300"
+              onClick={() => setStatusFilter(statusFilter === "received" ? "" : "received")}
+            >
+              {statusFilter === "received" ? "Reçu" : "Reçu"}
+            </button>
+          {/* Bouton pour afficher uniquement les commandes en cours */}
+          <button
+              className="bg-gray-200 ml-2 font-semibold px-4 py-1 rounded hover:bg-gray-300"
+              onClick={() => setShowInProgressOnly(!showInProgressOnly)}
+            >
+              {showInProgressOnly ? "En cours" : "En cours"}
+            </button>
+        </div>
       </div>
-      <div  className="overflow-x-auto m-4 bg-white rounded-2xl p-4">
+      
+      <div  className="overflow-x-auto bg-white rounded-2xl p-4 m-4">
+        <table className="table-auto min-w-full z-3">
+          <thead className='text-left text-charade-900 border-charade-100'>
+            <tr>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('num_commande')}>
+                #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_commande' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('num_commande')}>
+                VIN<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_commande' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('quantite_vendue')}>
+                QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite_vendue' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('date')}>
+                DATE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'date' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
+                MODE DE PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
+                PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
+                STATUT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('montant_total')}>
+                TOTAL (€) <FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedCommandes}
+          </tbody>
+        </table>
 
-      <table className="table-auto min-w-full z-3">
-<thead className='text-left text-charade-900 border-charade-100'>
-<tr>
+        {/* Pagination */}
+        <div className="flex justify-between mt-4">
+          <div>
+            <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
+              <FontAwesomeIcon icon={faAngleDoubleLeft} />
+            </button>
+            <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Préc</button>
+          </div>
+          <div>
+            <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
+          </div>
+          <div>
+            <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Suiv</button>
+            <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
+              <FontAwesomeIcon icon={faAngleDoubleRight} />
+            </button>
+          </div>
+        </div>
 
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_commande')}>
-    #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_commande' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-  </th>
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_commande')}>
-    VIN<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_commande' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-  </th>
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('quantite_vendue')}>
-    QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite_vendue' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-  </th>
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('date')}>
-    DATE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'date' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-  </th>
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('mode_paiement')}>
-    MODE DE PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-  </th>
-  <th className="px-4 py-4 font-semibold" onClick={() => handleSort('montant_total')}>
-    TOTAL<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-  </th>
-</tr>
-</thead>
-<tbody>
-{sortedCommandes}
-</tbody>
-</table>
-
-{/* Pagination */}
-<div className="flex justify-between mt-4">
-<div>
-<button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
-  <FontAwesomeIcon icon={faAngleDoubleLeft} />
-</button>
-<button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Préc</button>
-</div>
-<div>
-<p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
-</div>
-<div>
-<button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">Suiv</button>
-<button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-charade-500 px-2 py-1 rounded hover:bg-charade-100 disabled:opacity-50">
-  <FontAwesomeIcon icon={faAngleDoubleRight} />
-</button>
-</div>
-</div>
-{showAddCommandeDialog && <AddCommande onClose={() => setShowAddCommandeDialog(false)} updateData={handleUpdateData} />} 
+        {showAddCommandeDialog && <AddCommande onClose={() => setShowAddCommandeDialog(false)} updateData={handleUpdateData} />} 
 
       </div>
     </div>

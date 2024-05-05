@@ -22,29 +22,25 @@ async function generateNextCommandeId() {
 // Créer une nouvelle commande
 exports.create = async (req, res) => {
     try {
-        const { date, client, mode_paiement, vin, quantite_vendue } = req.body;
+        const { date, client, mode_paiement, vin, paiement, statut, quantite_vendue } = req.body;
         
-        // Recherche du client par son numéro
         const existingClient = await Client.findOne({ num_client: client.num_client });
         if (!existingClient) {
             return res.status(400).json({ message: "Le client n'existe pas." });
         }
 
-        // Recherche du vin par son numéro
         const existingVin = await Vin.findOne({ num_vin: vin.num_vin });
         if (!existingVin) {
             return res.status(400).json({ message: "Le vin n'existe pas." });
         }
-
-        // Vérification de la disponibilité en stock
+        
         if (existingVin.quantite < quantite_vendue) {
             return res.status(400).json({ message: "Quantité insuffisante en stock." });
         }
 
-        // Calcul du montant total
+    
         const montant_total = existingVin.prix * quantite_vendue;
 
-        // Soustraction de la quantité vendue du stock de vin
         existingVin.quantite -= quantite_vendue;
         await existingVin.save();
 
@@ -56,6 +52,8 @@ exports.create = async (req, res) => {
             client: existingClient._id, 
             mode_paiement, 
             vin: existingVin._id, 
+            paiement,
+            statut,
             quantite_vendue, 
             montant_total 
         });

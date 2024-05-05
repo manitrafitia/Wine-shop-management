@@ -10,6 +10,8 @@ export default function AddCommande({ onClose, updateData }) {
     quantite_vendue: '',
     date: '',
     mode_paiement: '',
+    paiement: '',
+    statut: '',
     num_client: '',
   });
 
@@ -52,6 +54,8 @@ export default function AddCommande({ onClose, updateData }) {
           num_client: productionData.num_client
         },
         mode_paiement: productionData.mode_paiement,
+        paiement: productionData.paiement,
+        statut: productionData.statut,
         vin: {
           num_vin: productionData.num_vin
         },
@@ -65,6 +69,8 @@ export default function AddCommande({ onClose, updateData }) {
         quantite_vendue: '',
         date: '',
         mode_paiement: '',
+        paiement: '',
+        statut:'',
         num_client: '',
       });
 
@@ -130,6 +136,35 @@ export default function AddCommande({ onClose, updateData }) {
               className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
+          </div>
+          <div>
+            <label htmlFor="" className='mb-4'>Paiement </label>
+            <select
+              name='paiement'
+              value={productionData.paiement}
+              onChange={handleChange}
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
+              required
+            >
+               <option value="">Sélectionnez un paiement</option>
+              <option value="1">Non payé</option>
+              <option value="2">Payé</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="" className='mb-4'>Statut </label>
+            <select
+              name='statut'
+              value={productionData.statut}
+              onChange={handleChange}
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
+              required
+            >
+              <option value="">Sélectionnez un statut</option>
+              <option value="1">En cours</option>
+              <option value="2">Reçu</option>
+            </select>
+
           </div>
           <div>
             <label htmlFor="" className='mb-4'>Client </label>

@@ -207,55 +207,55 @@ export default function Production() {
       <table className="table-auto min-w-full z-3">
         <thead className='text-slate-900 text-left border-slate-100'>
           <tr>
-            {/* <th className="px-4 py-4">
+            {/* <th className="px-2 py-2">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
             </th> */}
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_prod')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('num_prod')}>
               #<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'num_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
             
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('vin')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('vin')}>
               VIN<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('quantite')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('quantite')}>
               QUANTITE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('date_prod')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('date_prod')}>
               DATE<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('region')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('region')}>
               REGION<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4"></th>
+            <th className="px-2 py-2"></th>
             <th></th>
           </tr>
         </thead>
         <tbody className="text-gray-600 divide-y">
           {paginatedData.map((item, index) => (
             <tr key={index}>
-              {/* <td className="border-t border-slate-100 px-4 py-4">
+              {/* <td className="border-t border-slate-100 px-2 py-2">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" />
               </td> */}
-              <td className="border-t border-slate-100 px-4 py-4">{item.num_prod}</td>
+              <td className="border-t border-slate-100 px-2 py-2">{item.num_prod}</td>
              
-              <td className="border-t border-slate-100 px-4 py-4">{item.nom_vin}</td>
+              <td className="border-t border-slate-100 px-2 py-2">{item.nom_vin}</td>
 
-              <td className="border-t border-slate-100 px-4 py-4">{item.quantite}</td>
-              <td className="border-t border-slate-100 px-4 py-4">{formatDate(item.date_prod)}</td>
-              <td className="border-t border-slate-100 px-4 py-4">{item.region}</td>
-              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+              <td className="border-t border-slate-100 px-2 py-2">{item.quantite}</td>
+              <td className="border-t border-slate-100 px-2 py-2">{formatDate(item.date_prod)}</td>
+              <td className="border-t border-slate-100 px-2 py-2">{item.region}</td>
+              <td className="border-t border-slate-100  px-2 py-2 text-slate-500 hover:text-slate-900">
                 <button onClick={() => handleEditProduction(item.num_prod)}>
                 Modifier
                 </button>
               </td>
-              <td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+              <td className="border-t border-slate-100  px-2 py-2 text-slate-500 hover:text-slate-900">
               <button onClick={() => handleOpenConfirmDeleteDialog(item)}>Supprimer</button>
 
 </td>
-<td className="border-t border-slate-100  px-4 py-4 text-slate-500 hover:text-slate-900">
+{/* <td className="border-t border-slate-100  px-2 py-2 text-slate-500 hover:text-slate-900">
 
 <button><FontAwesomeIcon className="w-10" icon={faDownload} /></button>
-</td>
+</td> */}
     
             </tr>
           ))}

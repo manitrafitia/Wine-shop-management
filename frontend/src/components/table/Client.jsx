@@ -187,7 +187,7 @@ const handleEditClient = async (num_client, nom) => {
       />
     </div>
     <div>
-      <button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddClientDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
+      <button className="border border-charade-500 text-charade-500 font-semibold px-2 mr-2 py-1 rounded-xl hover:bg-charade-100" onClick={() => setShowAddClientDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
       {/* <button className="bg-charade-100 px-4 py-2 rounded-xl font-semibold hover:bg-charade-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button> */}
     </div>
   </div>
@@ -197,44 +197,44 @@ const handleEditClient = async (num_client, nom) => {
        <table className="table-auto min-w-full z-3">
              <thead className='text-left text-charade-900  border-charade-100'>
                <tr>
-                 {/* <th className="px-4 py-4">
+                 {/* <th className="px-2 py-2">
                    <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-charade-100 border-charade-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-charade-800 focus:ring-2 dark:bg-charade-700 dark:border-charade-600" />
                  </th> */}
-                 <th className="px-4 py-4 font-semibold" onClick={() => handleSort('num_client')}>
+                 <th className="px-2 py-2 font-semibold" onClick={() => handleSort('num_client')}>
                    #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_client' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
                  </th>
-                 <th className="px-4 py-4 font-semibold" onClick={() => handleSort('nom')}>
+                 <th className="px-2 py-2 font-semibold" onClick={() => handleSort('nom')}>
                    NOM<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
                  </th>
-                 <th className="px-4 py-4 font-semibold" onClick={() => handleSort('adresse')}>
+                 <th className="px-2 py-2 font-semibold" onClick={() => handleSort('adresse')}>
                    ADRESSE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'adresse' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
                  </th>
-                 <th className="px-4 py-4 font-semibold" onClick={() => handleSort('email')}>
+                 <th className="px-2 py-2 font-semibold" onClick={() => handleSort('email')}>
                    EMAIL<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'email' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
                  </th>
-                 <th className="px-4 py-4 font-semibold" onClick={() => handleSort('telephone')}>
+                 <th className="px-2 py-2 font-semibold" onClick={() => handleSort('telephone')}>
                    TEL<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'telephone' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
                  </th>
-                 <th className="px-4 py-4 font-semibold"></th>
+                 <th className="px-2 py-2 font-semibold"></th>
                </tr>
              </thead>
              <tbody className=''>
                {paginatedData.map((client, index) => (
                  <tr key={index}>
-                   {/* <td className="border-t border-charade-100 px-4 py-4">
+                   {/* <td className="border-t border-charade-100 px-2 py-2">
                      <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-charade-100 border-charade-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-charade-800 focus:ring-2 dark:bg-charade-700 dark:border-charade-600" />
                    </td> */}
-                   <td className="border-t border-charade-100 px-4 py-4">{client.num_client}</td>
-                   <td className="border-t border-charade-100 px-4 py-4">{client.nom}</td>
-                   <td className="border-t border-charade-100 px-4 py-4">{client.adresse}</td>
-                   <td className="border-t border-charade-100 px-4 py-4">{client.email}</td>
-                   <td className="border-t border-charade-100 px-4 py-4">{client.telephone}</td>
-                   <td className="border-t border-charade-100  px-4 py-4 text-charade-500 hover:text-charade-900">
+                   <td className="border-t border-charade-100 px-2 py-2">{client.num_client}</td>
+                   <td className="border-t border-charade-100 px-2 py-2">{client.nom}</td>
+                   <td className="border-t border-charade-100 px-2 py-2">{client.adresse}</td>
+                   <td className="border-t border-charade-100 px-2 py-2">{client.email}</td>
+                   <td className="border-t border-charade-100 px-2 py-2">{client.telephone}</td>
+                   <td className="border-t border-charade-100  px-2 py-2 text-charade-500 hover:text-charade-900">
                      <button onClick={() => handleEditClient(client.num_client, client.nom)}>
                        Modifier
                      </button>
                    </td>
-                   <td className="border-t border-charade-100  px-4 py-4 text-charade-500 hover:text-charade-900">
+                   <td className="border-t border-charade-100  px-2 py-2 text-charade-500 hover:text-charade-900">
                    <button onClick={() => handleOpenConfirmDeleteDialog(client)}>Supprimer</button>
      
      </td>

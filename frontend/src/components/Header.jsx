@@ -23,7 +23,7 @@ export default function Header({ username, onSearch }) {
 
   return (
     <header className="rounded-xl bg-white m-4">
-      <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <nav className="container mx-auto px-2 py-2 flex items-center justify-between">
         <ul className="flex items-center">
           <li className="relative text-charade-600">
             <input 

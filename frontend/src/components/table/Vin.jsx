@@ -205,7 +205,7 @@ export default function Vin() {
         className="w-full sm:w-auto border border-charade-200 rounded-2xl px-4 py-2" /> {/* Utilisation de w-full sur les petits écrans et w-auto sur les grands écrans */}
     </div>
     <div className="flex flex-wrap"> {/* Utilisation des classes flex pour gérer les boutons sur les petits écrans */}
-      <button className="border border-charade-500 text-charade-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVinDialog(true)}>
+      <button className="border border-charade-500 text-charade-500 font-semibold px-2 mr-2 py-1 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVinDialog(true)}>
         <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter
       </button>
       {/* <button className="bg-charade-100 px-4 py-2 rounded-xl font-semibold hover:bg-charade-200">
@@ -219,25 +219,25 @@ export default function Vin() {
         <thead className='text-left text-charade-900 border-charade-100'>
           <tr>
             {/* <th></th> */}
-            {/* <th className="px-4 py-4">
+            {/* <th className="px-2 py-2">
               <input id="header-checkbox" type="checkbox" checked={isCheckedAll} onChange={handleCheckAll} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
             </th> */}
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('num_vin')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('num_vin')}>
               #<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'num_vin' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('nom')}>
               NOM<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('nom')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('nom')}>
               TYPE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'nom' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('prix')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('prix')}>
               PRIX (€)<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'prix' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4  font-semibold" onClick={() => handleSort('quantite')}>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('quantite')}>
               QUANTITE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'quantite' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-4 py-4"></th>
+            <th className="px-2 py-2"></th>
             <th></th>
           </tr>
         </thead>
@@ -245,22 +245,22 @@ export default function Vin() {
           {/* Afficher les données paginées */}
           {paginatedData.map((vin, index) => (
             <tr key={index}>
-              {/* <td className="border-t border-charade-100 px-4 py-4">
+              {/* <td className="border-t border-charade-100 px-2 py-2">
                 <input id={`checkbox-${index}`} type="checkbox" checked={checkedItems[index]} onChange={() => handleCheckItem(index)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
               </td> */}
-              {/* <td className="border-t border-charade-100 px-4 py-4">  
+              {/* <td className="border-t border-charade-100 px-2 py-2">  
                <img src={vin.photo} alt={vin.nom} className="w-10 rounded-full" /></td>        */}
-              <td className="border-t border-charade-100 px-4 py-4">{vin.num_vin}</td>
-              <td className="border-t border-charade-100 px-4 py-4">{vin.nom}</td>
-              <td className="border-t border-charade-100 px-4 py-4">{getTypeLabel(vin.type)}</td>
-              <td className="border-t border-charade-100 px-4 py-4">{vin.prix}</td>
-              <td className={`border-t border-charade-100 px-4 py-4`}>{vin.quantite}</td>
-              <td className="border-t border-charade-100  px-4 py-4 text-charade-500 hover:text-charade-900 hover:text-charade-900">
+              <td className="border-t border-charade-100 px-2 py-2">{vin.num_vin}</td>
+              <td className="border-t border-charade-100 px-2 py-2">{vin.nom}</td>
+              <td className="border-t border-charade-100 px-2 py-2">{getTypeLabel(vin.type)}</td>
+              <td className="border-t border-charade-100 px-2 py-2">{vin.prix}</td>
+              <td className={`border-t border-charade-100 px-2 py-2`}>{vin.quantite}</td>
+              <td className="border-t border-charade-100  px-2 py-2 text-charade-500 hover:text-charade-900 hover:text-charade-900">
                 <button onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
                   Modifier
                 </button>
               </td>
-              <td className="border-t border-charade-100  px-4 py-4 text-charade-500 hover:text-charade-900">
+              <td className="border-t border-charade-100  px-2 py-2 text-charade-500 hover:text-charade-900">
               <button onClick={() => handleOpenConfirmDeleteDialog(vin)}>
   Supprimer
 </button>
