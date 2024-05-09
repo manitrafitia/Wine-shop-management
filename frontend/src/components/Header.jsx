@@ -49,7 +49,6 @@ export default function Header({ username, onSearch }) {
             <button 
               id="dropdownInformationButton" 
               onClick={toggleDropdown} 
-              className="" 
               type="button"
               className="hover:text-slate-600"
             >

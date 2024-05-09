@@ -107,29 +107,13 @@ export default function AddVin({ onClose, updateData }) {
           <form onSubmit={handleSubmit} className='text-black text-sm font-semibold mx-2  p-4'>
               <div>
               <div className="flex items-center space-x-6">
-          <div className="shrink-0">
-            <img
-              id='preview_img'
-              className="h-16 w-16 object-cover rounded-full"
-              src="https://media.istockphoto.com/id/527820617/vector/photographs-pictures-icon-on-white-background.jpg?s=612x612&w=0&k=20&c=KeE_j06DJgO7Dkx4l6gqPN6iEKQyWxOuzXjnMY5ul_A="
-              alt="Photo de profil actuelle"
-            />
-          </div>
           <label className="block">
     <input
       type="file"
-      onChange={(event) => {
-        loadFile(event);
-        handleChange(event);
-      }}
-      className="hidden"
+      onChange={handleChange}
+      className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
       required
     />
-    <div className=' bg-charade-100 hover:bg-charade-200 text-charade-500 rounded-full'>
-   <p className="p-2">
-   Choisir une image
-    </p>
-    </div>
   </label>
   {selectedFileName && (
     <p className="text-sm text-gray-500">{selectedFileName}</p>

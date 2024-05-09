@@ -94,9 +94,17 @@ export default function EditVin({ onClose, updateData, vinData: propVinData }) {
             value={vinData.nom}
             onChange={handleChange}
             className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
+       
+          />
+              
+              <input
+            type='text'
+            name='photo'
+            value={vinData.photo}
+            onChange={handleChange}
+            className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
            
           />
-            
      <div className="flex">
         <div>
             <label htmlFor="" className='mb-4'>Cépage </label>

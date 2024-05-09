@@ -55,25 +55,35 @@ export default function EditProduction({ onClose, updateData, productionId, prod
         // Si c'est une création, envoyer une requête POST avec les nouvelles données
         await axios.post('http://localhost:3000/production', productionData);
       }
-
+  
       console.log('Production edited/added successfully');
-
+  
       // Réinitialiser le formulaire après la soumission réussie
       setProductionData({
         vin: '',
         quantite: '',
         date_prod: '',
         region: '',
+        statut: '',
       });
-
+  
       // Mettre à jour les données dans Production.jsx après avoir ajouté ou modifié une production avec succès
       updateData();
-
+  
+      // Si le statut est "Produit", ajouter la quantité au vin
+      if (productionData.statut === '3') {
+        const vinId = productionData.vin;
+        const quantiteToAdd = parseInt(productionData.quantite);
+        await axios.put(`http://localhost:3000/vin/${vinId}`, { quantiteToAdd });
+        console.log('Quantity added to the associated wine successfully');
+      }
+  
       onClose();
     } catch (error) {
       console.error('Error editing/adding production:', error);
     }
   };
+  
 
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>
@@ -84,13 +94,17 @@ export default function EditProduction({ onClose, updateData, productionId, prod
         </div>
         <form onSubmit={handleSubmit} className='text-black text-sm font-semibold mx-2  p-5'>
           <label htmlFor="" className='mb-4'>Vin </label>
-          <input
+          <select
             name='vin'
             value={productionData.vin}
             onChange={handleChange}
             className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg text-charade-400'
             required
-          />
+          >
+            {vins.map((vin) => (
+              <option key={vin._id} value={vin._id}>{vin.nom}</option>
+            ))}
+          </select>
           
           <div className="flex">
             <div>
@@ -125,6 +139,20 @@ export default function EditProduction({ onClose, updateData, productionId, prod
               className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
+          </div>
+          <div>
+            <label htmlFor="" className='mb-4'>Statut </label>
+            <select
+              name='statut'
+              value={productionData.statut}
+              onChange={handleChange}
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
+              required
+            >
+              <option value="1">En attente</option>
+              <option value="2">En production</option>
+              <option value="3">Produit</option>
+            </select>
           </div>
           <div className='flex justify-between mb-4'>
             <button

@@ -193,7 +193,7 @@ export default function Vin() {
     <div>
       <div  className='overflow-x-auto m-4 bg-white rounded-2xl p-4'>
       <span className='text-slate-400 text-sm'>Dashboard \ </span>
-          <span className='text-sm font-bold text-slate-400'>Productions </span>
+          <span className='text-sm font-bold text-slate-400'>Vins </span>
       <p className="text-2xl text-charade-700 pt-2">Liste des vins</p>
   <div className="flex flex-col sm:flex-row justify-between mb-4 mt-4"> {/* Utilisation des classes flex pour gérer les colonnes sur les écrans larges */}
     <div className="mb-4 sm:mb-0"> {/* Utilisation de mb-4 pour l'espacement vertical */}
@@ -202,9 +202,9 @@ export default function Vin() {
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Rechercher ..."
-        className="w-full sm:w-auto border border-charade-200 rounded-2xl px-4 py-2" /> {/* Utilisation de w-full sur les petits écrans et w-auto sur les grands écrans */}
+        className="w-full sm:w-auto border border-charade-200 rounded-xl px-4 py-1" /> {/* Utilisation de w-full sur les petits écrans et w-auto sur les grands écrans */}
     </div>
-    <div className="flex flex-wrap"> {/* Utilisation des classes flex pour gérer les boutons sur les petits écrans */}
+    <div> {/* Utilisation des classes flex pour gérer les boutons sur les petits écrans */}
       <button className="border border-charade-500 text-charade-500 font-semibold px-2 mr-2 py-1 rounded-xl hover:bg-charade-100" onClick={() => setShowAddVinDialog(true)}>
         <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter
       </button>
@@ -255,8 +255,8 @@ export default function Vin() {
               <td className="border-t border-charade-100 px-2 py-2">{getTypeLabel(vin.type)}</td>
               <td className="border-t border-charade-100 px-2 py-2">{vin.prix}</td>
               <td className={`border-t border-charade-100 px-2 py-2`}>{vin.quantite}</td>
-              <td className="border-t border-charade-100  px-2 py-2 text-charade-500 hover:text-charade-900 hover:text-charade-900">
-                <button onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
+              <td className="border-t border-charade-100  px-2 text-charade-500 hover:text-charade-900 hover:text-charade-900">
+                <button className='bg-white shadow p-1 m-1 rounded' onClick={() => handleEditVin(vin.num_vin, vin.nom)}>
                   Modifier
                 </button>
               </td>

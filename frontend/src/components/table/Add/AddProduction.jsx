@@ -10,6 +10,7 @@ export default function AddProduction({ onClose, updateData }) {
     quantite: '',
     date_prod: '',
     region: '',
+    statut: 1 // Définir le statut par défaut
   });
 
   useEffect(() => {
@@ -51,7 +52,8 @@ export default function AddProduction({ onClose, updateData }) {
         },
         date_prod: productionData.date_prod,
         region: productionData.region,
-        quantite: parseInt(productionData.quantite)
+        quantite: parseInt(productionData.quantite),
+        statut: parseInt(productionData.statut) // Convertir le statut en entier
       };
     
       const response = await axios.post('http://localhost:3000/production', dataToSend);
@@ -61,6 +63,7 @@ export default function AddProduction({ onClose, updateData }) {
         quantite: '',
         date_prod: '',
         region: '',
+        statut: 1 // Réinitialiser le statut à sa valeur par défaut après soumission
       });
 
       updateData();
@@ -125,6 +128,20 @@ export default function AddProduction({ onClose, updateData }) {
               className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
               required
             />
+          </div>
+          <div>
+            <label htmlFor="" className='mb-4'>Statut </label>
+            <select
+              name='statut'
+              value={productionData.statut}
+              onChange={handleChange}
+              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
+              required
+            >
+              <option value="1">En attente</option>
+              <option value="2">En production</option>
+              <option value="3">Produit</option>
+            </select>
           </div>
           <div className='flex justify-between mb-4'>
             <button

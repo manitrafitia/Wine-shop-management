@@ -194,11 +194,11 @@ export default function Production() {
         value={searchValue}
         onChange={handleInputChange}
         placeholder="Rechercher..."
-        className="w-auto border border-slate-200 rounded-2xl px-4 py-2"
+        className="w-auto border border-slate-200 rounded-xl px-4 py-1"
       />
         </div>
         <div>
-          <button className="border border-slate-500 text-slate-500 font-semibold px-4 mr-2 py-2 rounded-xl hover:bg-slate-100" onClick={() => setShowAddProductionDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
+          <button className="border border-charade-500 text-charade-500 font-semibold px-2 mr-2 py-1 rounded-xl hover:bg-charade-100" onClick={() => setShowAddProductionDialog(true)}> <FontAwesomeIcon className='mr-2' icon={faPlus} />Ajouter</button>
           {/* <button className="bg-slate-100 px-4 py-2 rounded-xl font-semibold hover:bg-slate-200"> <FontAwesomeIcon className='mr-2' icon={faTrash} />Supprimer</button> */}
         </div>
       </div>
@@ -226,6 +226,9 @@ export default function Production() {
             <th className="px-2 py-2  font-semibold" onClick={() => handleSort('region')}>
               REGION<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
+            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('region')}>
+              STATUT<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
+            </th>
             <th className="px-2 py-2"></th>
             <th></th>
           </tr>
@@ -243,6 +246,18 @@ export default function Production() {
               <td className="border-t border-slate-100 px-2 py-2">{item.quantite}</td>
               <td className="border-t border-slate-100 px-2 py-2">{formatDate(item.date_prod)}</td>
               <td className="border-t border-slate-100 px-2 py-2">{item.region}</td>
+              <td className="border-t border-slate-100 px-2 py-2 ">
+                <div className={
+                  item.statut === 1 ? "bg-gray-200 w-20 rounded-xl text-sm text-center font-semibold" :
+                  item.statut === 2 ? "bg-orange-500 w-20 rounded-xl text-white text-sm text-center font-semibold" :
+                  item.statut === 3 ? "bg-green-500 w-20 rounded-xl text-white text-sm text-center font-semibold" :
+                  ""
+                }>
+                  {item.statut === 1 && "En attente"}
+                  {item.statut === 2 && "En cours"}
+                  {item.statut === 3 && "Produit"}
+                </div>               
+              </td>
               <td className="border-t border-slate-100  px-2 py-2 text-slate-500 hover:text-slate-900">
                 <button onClick={() => handleEditProduction(item.num_prod)}>
                 Modifier
