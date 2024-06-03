@@ -3,9 +3,9 @@ import axios from 'axios';
 import Panier from './Panier';
 
 export default function ListeVin() {
+    const [panier, setPanier] = useState([]);
     const [vins, setVins] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [panier, setPanier] = useState([]);
     const [selectedType, setSelectedType] = useState('');
     const [firstPriceValue, setFirstPriceValue] = useState('');
     const [secondPriceValue, setSecondPriceValue] = useState('');
@@ -14,6 +14,7 @@ export default function ListeVin() {
 
     useEffect(() => {
         fetchAllVins();
+        fetchPanier();
     }, []);
 
     const fetchAllVins = async () => {
@@ -21,6 +22,15 @@ export default function ListeVin() {
             const response = await axios.get('http://localhost:3000/vin');
             setVins(response.data);
             setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchPanier = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/commande/panier');
+            setPanier(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -68,28 +78,32 @@ export default function ListeVin() {
 
     const addToCart = async (vin) => {
         try {
-            const response = await axios.post('http://localhost:3000/commande/panier/add', {
-                vinId: vin._id,
-                quantity: 1 // Vous pouvez définir la quantité par défaut ici
-            });
-            setPanier(response.data);
+            const existingItemIndex = panier.findIndex(item => item._id === vin._id);
+
+            if (existingItemIndex !== -1) {
+                const updatedPanier = [...panier];
+                updatedPanier[existingItemIndex].quantity++;
+                setPanier(updatedPanier);
+            } else {
+                const response = await axios.post('http://localhost:3000/commande/panier/add', {
+                    vinId: vin._id,
+                    quantity: 1
+                });
+                const vinWithNom = { ...vin, nom: vin.nom, quantity: 1 };
+                setPanier([...panier, vinWithNom]);
+            }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const removeFromCart = async (vinId) => {
-        try {
-            const response = await axios.delete(`http://localhost:3000/panier/${vinId}`);
-            setPanier(response.data);
-        } catch (error) {
-            console.error(error);
-        }
+    const removeFromCart = (vinId) => {
+        setPanier(panier.filter(item => item._id !== vinId));
     };
 
     const updateQuantity = async (vinId, newQuantity) => {
         try {
-            const response = await axios.put(`http://localhost:3000/panier/${vinId}`, {
+            const response = await axios.put(`http://localhost:3000/commande/panier/${vinId}`, {
                 quantity: newQuantity
             });
             setPanier(response.data);

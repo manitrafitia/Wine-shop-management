@@ -38,12 +38,11 @@ export default function Login({ onLogin }) {
 
   return (
     <div className="relative flex h-screen justify-center items-center bg-slate-100">
-      {/* <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url('/3b964f6737d44dfaca1b321106faf203.jpg')` }}></div>
-      <div className="absolute inset-0 z-10 bg-black opacity-75"></div> */}
-      <div className="z-20 w-1/2 p-7 text-white flex justify-center items-center flex-col bg-white h-screen">
-        <img src="2007.i039.019_cyber_security_spyware_data_protection_isometric_set-06.jpg" alt="" />
-        {/* <img src="logo.png" alt="" className='w-40 mb-4'/>
-        <p className="text-3xl text-black">Vinspiration, Chaque bouteille raconte une histoire.</p> */}
+      <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url('/3b964f6737d44dfaca1b321106faf203.jpg')` }}></div>
+      <div className="absolute inset-0 z-10 bg-black opacity-75"></div>
+      <div className="z-20 w-1/2 p-7 text-white flex justify-center items-center flex-col h-screen">
+        {/* <img src="logo.png" alt="" className='w-40 mb-4'/> */}
+        <p className="text-3xl text-white">Vinspiration, Chaque bouteille raconte une histoire.</p>
       </div>
 
       <div  className="z-20 w-1/2">

@@ -7,7 +7,17 @@ import AddCommande from './Add/AddCommande';
 import EditCommande from './Edit/EditCommande'; // Importez le composant EditCommande ici
 
 const formatDate = (dateString) => {
+  if (!dateString) {
+    return ""; // Or any default value you prefer
+  }
+
   const date = new Date(dateString);
+
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    return "Invalid Date"; // Or any message you prefer
+  }
+
   const options = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
   return formattedDate;
@@ -122,7 +132,7 @@ export default function Commande() {
       <td className="border-t border-gray-200 px-2 py-2">{vinList.find(vin => vin._id === commande.vin)?.nom}</td>
       <td className="border-t border-gray-200 px-2 py-2">{commande.quantite_vendue}</td>
       <td className="border-t border-gray-200 px-2 py-2">{formatDate(commande.date)}</td>
-      <td className="border-t border-gray-200 px-2 py-2">{commande.mode_paiement}</td>
+      {/* <td className="border-t border-gray-200 px-2 py-2">{commande.mode_paiement}</td> */}
       <td className="border-t border-gray-200 px-2 py-2">
         <div className={commande.paiement === 1 ? "bg-red-500 text-white rounded-xl w-20 text-sm text-center font-semibold" : "font-semibold text-white bg-green-500 text-sm rounded-xl w-20 text-center"}>
           {commande.paiement === 1 ? "Non payé" : "Payé"}
@@ -198,18 +208,18 @@ export default function Commande() {
               <th className="px-2 py-2 font-semibold" onClick={() => handleSort('date')}>
                 DATE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'date' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
               </th>
-              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
+              {/* <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
                 MODE DE PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-              </th>
+              </th> */}
               <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
                 PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
               </th>
               <th className="px-2 py-2 font-semibold" onClick={() => handleSort('mode_paiement')}>
                 STATUT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
               </th>
-              <th className="px-2 py-2 font-semibold" onClick={() => handleSort('montant_total')}>
+              {/* <th className="px-2 py-2 font-semibold" onClick={() => handleSort('montant_total')}>
                 TOTAL (€) <FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-              </th>
+              </th> */}
               <th></th>
             </tr>
           </thead>

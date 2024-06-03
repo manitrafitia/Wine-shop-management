@@ -9,6 +9,7 @@ import Rech from '../components/Rech';
 import Sidebar, { SidebarItem } from '../components/Sidebar';
 import Vin from '../components/table/Vin';
 import ProductionReport from '../components/ProductionReport';
+import Vente from './table/Vente';
 
 function MonApp({}) {
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -39,6 +40,8 @@ function MonApp({}) {
         return <Rech />;
       case 'ProductionReport':
         return <ProductionReport />;
+        case 'Vente':
+        return <Vente />;
       default:
         return null;
     }
@@ -96,6 +99,13 @@ function MonApp({}) {
             />
           </button>
           <br />
+          <button onClick={() => handleSidebarItemClick('Vente')}>
+            <SidebarItem
+              icon={faStore}
+              text="Ventes"
+              active={currentPage === 'Vente'}
+            />
+          </button>
           <br />
         </Sidebar>
         <div className="flex-1 bg-slate-100 dark:bg-slate-900">

@@ -53,7 +53,6 @@ export default function AddCommande({ onClose, updateData }) {
         client: {
           num_client: productionData.num_client
         },
-        mode_paiement: productionData.mode_paiement,
         paiement: productionData.paiement,
         statut: productionData.statut,
         vin: {
@@ -68,7 +67,6 @@ export default function AddCommande({ onClose, updateData }) {
         num_vin: '',
         quantite_vendue: '',
         date: '',
-        mode_paiement: '',
         paiement: '',
         statut:'',
         num_client: '',
@@ -126,16 +124,6 @@ export default function AddCommande({ onClose, updateData }) {
                 required
               />
             </div>
-          </div>
-          <div>
-            <label htmlFor="" className='mb-4'>Mode de paiement </label>
-            <input
-              name='mode_paiement'
-              value={productionData.mode_paiement}
-              onChange={handleChange}
-              className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
-              required
-            />
           </div>
           <div>
             <label htmlFor="" className='mb-4'>Paiement </label>
