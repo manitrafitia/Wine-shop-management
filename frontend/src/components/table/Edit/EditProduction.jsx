@@ -70,20 +70,11 @@ export default function EditProduction({ onClose, updateData, productionId, prod
       // Mettre à jour les données dans Production.jsx après avoir ajouté ou modifié une production avec succès
       updateData();
   
-      // Si le statut est "Produit", ajouter la quantité au vin
-      if (productionData.statut === '3') {
-        const vinId = productionData.vin;
-        const quantiteToAdd = parseInt(productionData.quantite);
-        await axios.put(`http://localhost:3000/vin/${vinId}`, { quantiteToAdd });
-        console.log('Quantity added to the associated wine successfully');
-      }
-  
       onClose();
     } catch (error) {
       console.error('Error editing/adding production:', error);
     }
   };
-  
 
   return (
     <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50'>

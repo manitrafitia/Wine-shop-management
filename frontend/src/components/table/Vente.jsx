@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH, faPencil, faTrash, faPlus, faSort, faSortUp, faSortDown, faAngleDoubleLeft, faAngleDoubleRight, faDownload } from '@fortawesome/free-solid-svg-icons';
 import useTableFunctions from '../TableFunctions';
 import AddVente from './Add/AddVente';
-import EditVente from './Edit/EditVente'; // Importez le composant EditVente
+import EditVente from './Edit/EditVente';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import ReceiptPDF from './ReceiptPDF';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -33,8 +35,8 @@ export default function Vente() {
   } = useTableFunctions();
 
   const [showAddVenteDialog, setShowAddVenteDialog] = useState(false);
-  const [showEditVenteDialog, setShowEditVenteDialog] = useState(false); // Ajoutez un nouvel état pour le composant EditVente
-  const [editVenteIndex, setEditVenteIndex] = useState(null); // Ajoutez un nouvel état pour stocker l'index de la vente à modifier
+  const [showEditVenteDialog, setShowEditVenteDialog] = useState(false);
+  const [editVenteIndex, setEditVenteIndex] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,8 +55,6 @@ export default function Vente() {
         setIsCheckedAll(false);
         const totalPagesCount = Math.ceil(venteResponse.data.length / itemsPerPage);
         setTotalPages(totalPagesCount);
-        console.log('Ventes data:', venteResponse.data); // Debug: Vérifiez les données de vente
-        console.log('Vins data:', vinResponse.data); // Debug: Vérifiez les données de vin
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
@@ -127,33 +127,21 @@ export default function Vente() {
     .map((vente, index) => (
       <tr key={index}>
         <td className="border-t border-gray-200 px-4 py-4">{vente.num_vente}</td>
+        <td className="border-t border-gray-200 px-4 py-4">{vente.client?.num_client || 'Client inconnu'}</td>
         <td className="border-t border-gray-200 px-4 py-4">
-          {vente.vins && vente.vins.length > 0 ? (
-            vente.vins.map(vinItem => {
-              const vinName = vinNames[vinItem.vin] || 'Chargement...';
-              return (
-                <div key={vinItem.vin}>
-                  {vinName} (Quantité: {vinItem.quantite})
-                </div>
-              );
-            })
-            
-          ) : (
-            <div>Aucun vin associé</div>
-          )}
+          {(vente.vins || []).map(vinItem => (
+            <div key={vinItem.vin._id}>
+              {vinItem.vin.nom} - {vinItem.quantite}
+            </div>
+          ))}
         </td>
         <td className="border-t border-gray-200 px-4 py-4">{formatDate(vente.date)}</td>
-        <td className="border-t border-gray-200 px-4 py-4">{vente.mode_paiement}</td>
         <td className="border-t border-gray-200 px-4 py-4">{vente.montant_total}</td>
-        <td>
-          <button onClick={() => {
-            setShowEditVenteDialog(true);
-            setEditVenteIndex(index);
-          }}>
-            Modifier
-          </button>
+        <td className="border-t border-gray-200 px-4 py-4">
+          <PDFDownloadLink document={<ReceiptPDF vente={vente} />} fileName={`recu_${vente.num_vente}.pdf`}>
+            {({ blob, url, loading, error }) => (loading ? 'Loading...' : 'Télécharger')}
+          </PDFDownloadLink>
         </td>
-        <td>Télécharger</td>
       </tr>
     ));
 
@@ -188,47 +176,38 @@ export default function Vente() {
               <th className="px-4 py-4 font-semibold" onClick={() => handleSort('date')}>
                 DATE<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'date' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
               </th>
-              <th className="px-4 py-4 font-semibold" onClick={() => handleSort('mode_paiement')}>
-                MODE DE PAIEMENT<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'mode_paiement' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-              </th>
               <th className="px-4 py-4 font-semibold" onClick={() => handleSort('montant_total')}>
                 MONTANT TOTAL<FontAwesomeIcon className="float-right text-charade-200 hover:text-charade-600" icon={sortColumn === 'montant_total' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
               </th>
-              <th></th>
+              <th className="px-4 py-4 font-semibold">
+                TELECHARGEMENT
+              </th>
             </tr>
           </thead>
-          <tbody className='align-baseline'>
+          <tbody className="align-baseline">
             {sortedVentes}
           </tbody>
         </table>
-       
-      <div className="flex justify-between mt-4">
-        <div>
-          <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
+        <div className="flex justify-between mt-4">
+          <button
+            className={`px-4 py-2 rounded ${currentPage === 1 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-charade-500 text-white'}`}
+            onClick={() => currentPage > 1 && paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
             <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </button>
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Préc</button>
-        </div>
-        <div>
-          <p className="text-gray-600">Page {currentPage} sur {totalPages}</p>
-        </div>
-        <div>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">Suiv</button>
-          <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="text-slate-500 px-2 py-1 rounded hover:bg-slate-100 disabled:opacity-50">
+          <span>Page {currentPage} sur {totalPages}</span>
+          <button
+            className={`px-4 py-2 rounded ${currentPage === totalPages ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-charade-500 text-white'}`}
+            onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </button>
         </div>
       </div>
-
-      </div>
-      {showAddVenteDialog && <AddVente onClose={() => setShowAddVenteDialog(false)} onSave={handleUpdateData} />}
-      {showEditVenteDialog && editVenteIndex !== null && (
-        <EditVente
-onClose={() => setShowEditVenteDialog(false)}
-vente={data[editVenteIndex]} // Passer les données de la vente à modifier
-onUpdate={handleUpdateData} // Passer la fonction de mise à jour des données
-/>
-)}
-</div>
-);
+      {showAddVenteDialog && <AddVente onClose={() => setShowAddVenteDialog(false)} onAdd={handleUpdateData} />}
+      {showEditVenteDialog && <EditVente vente={data[editVenteIndex]} onClose={() => setShowEditVenteDialog(false)} onUpdate={handleUpdateData} />}
+    </div>
+  );
 }

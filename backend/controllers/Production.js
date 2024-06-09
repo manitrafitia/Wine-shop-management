@@ -1,4 +1,3 @@
-// Contrôleur pour la gestion des productions
 const Production = require('../model/production');
 const Vin = require('../model/vin');
 
@@ -69,40 +68,57 @@ exports.findOne = async (req, res) => {
 };
 
 // Mettre à jour une production par son numéro de production
+// Mettre à jour une production par son numéro de production
 exports.update = async (req, res) => {
     try {
-        const { statut, quantite: newQuantite } = req.body; // Destructuration pour obtenir le nouveau statut et la nouvelle quantité
-        const updatedProduction = await Production.findOneAndUpdate({ num_prod: req.params.num_prod }, req.body, { new: true });
-        if (!updatedProduction) {
+        const { statut, quantite: newQuantite } = req.body;
+        const production = await Production.findOne({ num_prod: req.params.num_prod });
+        if (!production) {
             return res.status(404).send({ message: "Production non trouvée avec le numéro " + req.params.num_prod });
         }
 
-        // Vérifier si le statut a été changé en 3 (Produit)
-        if (statut === 3) {
-            const existingVin = await Vin.findById(updatedProduction.vin);
-            if (!existingVin) {
-                return res.status(404).send({ message: "Vin non trouvé." });
-            }
+        const previousStatut = production.statut;
+        const oldQuantite = production.quantite;
+        production.statut = statut;
+        production.quantite = newQuantite;
+        const updatedProduction = await production.save();
 
-            // Ajouter la nouvelle quantité au vin
-            existingVin.quantite += newQuantite; // Assurez-vous que newQuantite est correctement récupéré depuis req.body
-            await existingVin.save();
+        const existingVin = await Vin.findById(production.vin);
+        if (!existingVin) {
+            return res.status(404).send({ message: "Vin non trouvé." });
         }
 
+        if (previousStatut !== 3 && statut === 3) {
+            existingVin.quantite += newQuantite;
+        } else if (previousStatut === 3 && statut !== 3) {
+            existingVin.quantite -= oldQuantite;
+        } else if (previousStatut === 3 && statut === 3) {
+            existingVin.quantite += newQuantite - oldQuantite;
+        }
+
+        await existingVin.save();
         res.status(200).json(updatedProduction);
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la mise à jour de la production avec le numéro " + req.params.num_prod });
     }
 };
 
-
 // Supprimer une production par son numéro de production
 exports.delete = async (req, res) => {
     try {
-        const deletedProduction = await Production.findOneAndDelete({ num_prod: req.params.num_prod });
-        if (!deletedProduction) {
+        const productionToDelete = await Production.findOne({ num_prod: req.params.num_prod });
+        if (!productionToDelete) {
             return res.status(404).send({ message: "Production non trouvée avec le numéro " + req.params.num_prod });
         }
+
+        const vin = await Vin.findById(productionToDelete.vin);
+        if (vin) {
+            vin.quantite -= productionToDelete.quantite;
+            await vin.save();
+        }
+
+        await Production.findOneAndDelete({ num_prod: req.params.num_prod });
+
         res.status(200).json({ message: "Production supprimée avec succès!" });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la suppression de la production avec le numéro " + req.params.num_prod });

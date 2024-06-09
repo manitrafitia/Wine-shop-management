@@ -101,14 +101,14 @@ export default function AddVente({ onClose, updateData }) {
             className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
           />
-          <label htmlFor="" className='mb-4'>Mode de paiement</label>
+          {/* <label htmlFor="" className='mb-4'>Mode de paiement</label>
           <input
             name='mode_paiement'
             value={venteData.mode_paiement}
             onChange={handleChange}
             className='w-full p-2 mt-2 mb-3 border border-charade-200 rounded-lg'
             required
-          />
+          /> */}
           <label htmlFor="" className='mb-4'>Numéro de client</label>
           <input
             name='num_client'

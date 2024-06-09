@@ -22,7 +22,7 @@ async function generateNextVenteId() {
 // Créer une nouvelle vente
 exports.create = async (req, res) => {
     try {
-        const { date, client, mode_paiement, vins } = req.body;
+        const { date, client, vins } = req.body;
         
         // Recherche du client par son numéro
         const existingClient = await Client.findOne({ num_client: client.num_client });
@@ -61,7 +61,6 @@ exports.create = async (req, res) => {
             num_vente, 
             date, 
             client: existingClient._id, 
-            mode_paiement, 
             vins: vinsDetails, 
             montant_total 
         });
