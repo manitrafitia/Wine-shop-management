@@ -129,7 +129,7 @@ export default function AddProduction({ onClose, updateData }) {
               required
             />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="" className='mb-4'>Statut </label>
             <select
               name='statut'
@@ -142,7 +142,7 @@ export default function AddProduction({ onClose, updateData }) {
               <option value="2">En production</option>
               <option value="3">Produit</option>
             </select>
-          </div>
+          </div> */}
           <div className='flex justify-between mb-4'>
             <button
               type='button'

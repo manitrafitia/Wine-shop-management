@@ -226,9 +226,9 @@ export default function Production() {
             <th className="px-2 py-2  font-semibold" onClick={() => handleSort('region')}>
               REGION<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
             </th>
-            <th className="px-2 py-2  font-semibold" onClick={() => handleSort('region')}>
+            {/* <th className="px-2 py-2  font-semibold" onClick={() => handleSort('region')}>
               STATUT<FontAwesomeIcon className="float-right text-slate-200 hover:text-slate-600" icon={sortColumn === 'date_prod' ? (sortType === 'asc' ? faSortUp : faSortDown) : faSort} />
-            </th>
+            </th> */}
             <th className="px-2 py-2"></th>
             <th></th>
           </tr>
@@ -246,7 +246,7 @@ export default function Production() {
               <td className="border-t border-slate-100 px-2 py-2">{item.quantite}</td>
               <td className="border-t border-slate-100 px-2 py-2">{formatDate(item.date_prod)}</td>
               <td className="border-t border-slate-100 px-2 py-2">{item.region}</td>
-              <td className="border-t border-slate-100 px-2 py-2 ">
+              {/* <td className="border-t border-slate-100 px-2 py-2 ">
                 <div className={
                   item.statut === 1 ? "bg-gray-200 w-20 rounded-xl text-sm text-center font-semibold" :
                   item.statut === 2 ? "bg-orange-500 w-20 rounded-xl text-white text-sm text-center font-semibold" :
@@ -257,7 +257,7 @@ export default function Production() {
                   {item.statut === 2 && "En cours"}
                   {item.statut === 3 && "Produit"}
                 </div>               
-              </td>
+              </td> */}
               <td className="border-t border-slate-100  px-2 py-2 text-slate-500 hover:text-slate-900">
                 <button onClick={() => handleEditProduction(item.num_prod)}>
                 Modifier

@@ -90,14 +90,14 @@ function MonApp({}) {
               active={currentPage === 'Client'}
             />
           </button>
-          <br />
+          {/* <br />
           <button onClick={() => handleSidebarItemClick('Commande')}>
             <SidebarItem
               icon={faStore}
               text="Commandes"
               active={currentPage === 'Commande'}
             />
-          </button>
+          </button> */}
           <br />
           <button onClick={() => handleSidebarItemClick('Vente')}>
             <SidebarItem

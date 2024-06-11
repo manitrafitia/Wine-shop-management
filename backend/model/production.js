@@ -6,7 +6,7 @@ const ProductionSchema = new mongoose.Schema({
   quantite: { type: Number },
   date_prod: { type: Date, required: true },
   region: { type: String, required: true },
-  statut: { type: Number, required: true, default: 1 } // 1: En attente, 2: En production, 3: Produit
+  statut: { type: Number, default: 3 } // 1: En attente, 2: En production, 3: Produit
 });
 
 ProductionSchema.pre('save', async function(next) {
